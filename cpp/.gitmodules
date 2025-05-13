@@ -1,0 +1,7 @@
+#[submodule "cpp/THC"]
+#    path = cpp/THC
+#    url = <url-du-repository-THC>
+#
+#[submodule "cpp/TsyncMaster"]
+#    path = cpp/TsyncMaster
+#    url = <url-du-repository-TsyncMaster>
