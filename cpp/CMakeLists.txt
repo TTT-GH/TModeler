@@ -9,7 +9,7 @@ add_library(TModeler STATIC IMPORTED GLOBAL)
 
 # 🧠 Détection du type de build (Debug, Release, etc.)
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")  # Valeur par défaut
+    set(CMAKE_BUILD_TYPE "Debug")  # Valeur par défaut #Debug #Release
 endif()
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE_LOWER)
