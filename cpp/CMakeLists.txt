@@ -39,3 +39,8 @@ set_target_properties(TModeler PROPERTIES
     IMPORTED_LOCATION "${TMODELER_LIB_PATH}/${TMODELER_LIB_NAME}"
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
+
+# 🔌 Ajout conditionnel de l'adaptation Qt
+if(TMODELER_WITH_QT)
+    add_subdirectory(adapters/Qt)
+endif()
