@@ -42,6 +42,9 @@ public:
 
     ValueType& get(size_t index);
     void set(size_t index, const ValueType& value);
+
+    template <typename Sp>
+    const Sp& get(size_t i) const;
     template <typename Sp>
     Sp& get(size_t i);
 
@@ -51,6 +54,7 @@ public:
 
     bool remove(const ValueType& value);
     bool contains(const ValueType& value) const;
+    int indexOf(const int k) const;
     int indexOf(const ValueType& value) const;
     int lastIndexOf(const ValueType& value) const;
     size_t size() const;

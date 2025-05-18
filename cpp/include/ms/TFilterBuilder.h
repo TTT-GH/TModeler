@@ -26,6 +26,7 @@ inline std::string strJoin(JoinType type)
     case JoinType::CROSS:
         return "CROSS";
     }
+    return "INNER";
 }
 
 // --- Structures de clause ---

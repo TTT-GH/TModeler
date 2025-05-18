@@ -15,21 +15,32 @@ class Tob;
 
 class Tclass {
 protected:
-    Tob& _instance;
-    Tclass* _superClass = nullptr;
-
     AnyList _fields;
     std::string _package = "";
     std::string _db = "";
 
+
+    std::type_index _type;
+    /* for another time
+    std::shared_ptr<Tclass> _super = nullptr;
+    */
+    Tclass* _superClass = nullptr;
+
 public:
-    static Tclass with(Tob& instance);
+    /*
+    Tclass(std::type_index type, std::shared_ptr<Tclass> super = nullptr);*/
 
     Tclass();
+    Tclass(Tob& inst, Tclass* sup = nullptr);
+    Tclass(Tob& inst);
+    static Tclass with(Tob& instance);
 
-    Tclass(Tob& instance, Tclass* super = nullptr);
+    const std::type_index& type() const;
 
-    Tclass(Tob& instance);
+    Tclass* super() const;
+    Tclass& super(Tclass* v);
+
+
 
     Tclass& package(std::string v);
 
@@ -53,8 +64,6 @@ public:
     // Check if this class descends from another class and return generation distance
     int descendsFrom(const Tclass& parent) const;
 
-    std::type_info const& type() const;
-
     std::string name() const;
 
     std::string getPackage() const;
@@ -62,12 +71,6 @@ public:
     std::string geTdb() const;
 
     std::string getModelName() const;
-
-    std::any newInstance() const {return &_instance;}
-
-    Tclass* super() const {return _superClass;}
-
-    Tclass& super(Tclass* v) { _superClass = v; return *this; }
 
     bool equals(Tclass* cls) const;
 

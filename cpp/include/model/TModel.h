@@ -56,6 +56,7 @@ class TModel : public Tob{
     IntField _id = init<IntField>().primaryKey().autoIncrement().notNull();
     JsonField meta = init<JsonField>();
 
+    virtual const IntField& key() const{ return _id; }
     virtual IntField& key() { return _id; }
     virtual std::string keyName() { return TF(_id).first;}
 
@@ -70,6 +71,23 @@ class TModel : public Tob{
     virtual bool isNull();
     virtual void null(bool v);
     virtual bool empty();
+
+
+    bool operator==(const TModel<T>& v) const{
+        if (key().empty() || v.key().empty())
+        {
+            return false;
+        }
+        return key().get() == v.key().get();
+    }
+
+    bool operator==(const int k) const {
+        if (key().empty())
+        {
+            return false;
+        }
+        return key().get() == k;
+    }
 private:
     bool _null = false;
 };

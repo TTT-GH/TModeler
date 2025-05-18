@@ -22,7 +22,23 @@ typename Tlist<Ts...>::ValueType& Tlist<Ts...>::get(size_t index) {
 
 template <typename... Ts>
 template <typename Sp>
-Sp& Tlist<Ts...>::get(size_t i) {
+Sp& Tlist<Ts...>::get(size_t i){
+    static_assert((std::is_same_v<T, Ts> || ...), "T must be one of Ts...");
+
+    if (i >= this->size())
+        throw std::out_of_range("Index out of range");
+
+    if constexpr (sizeof...(Ts) == 1) {
+        return (*this)[i];
+    }
+    else {
+        return std::get<Sp>((*this)[i]);
+    }
+}
+
+template <typename... Ts>
+template <typename Sp>
+const Sp& Tlist<Ts...>::get(size_t i) const {
     static_assert((std::is_same_v<T, Ts> || ...), "T must be one of Ts...");
 
     if (i >= this->size())
@@ -80,9 +96,23 @@ bool Tlist<Ts...>::contains(const ValueType& value) const {
 
 template <typename... Ts>
 int Tlist<Ts...>::indexOf(const ValueType& value) const {
-    auto it = std::find(this->begin(), this->end(), value);
-    if (it != this->end())
-        return static_cast<int>(std::distance(this->begin(), it));
+    if constexpr (sizeof...(Ts) == 1) {
+        for (int i = 0; i < size(); i++) {
+            if (this->at(i) == value)
+                return i;
+        }
+    }
+    return -1;
+}
+template <typename... Ts>
+int Tlist<Ts...>::indexOf(const int k) const {
+    for (int i=0;i<size();i++)
+    {
+        if (get<T>(i) == k)
+        {
+            return i;
+        }
+    }
     return -1;
 }
 
