@@ -40,11 +40,5 @@ set_target_properties(TModeler PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
-# 🔌 Ajout conditionnel de l'adaptation UI
-if(TMODELER_WITH_QT)
-    message(STATUS "🔌 TModeler: Qt adapter enabled (TMODELER_WITH_QT = ON)")
-    add_subdirectory(adapters/Qt)
-else()
-    message(STATUS "🚫 TModeler: Qt adapter disabled (TMODELER_WITH_QT = OFF)")
-    # No UI interface
-endif()
+# 🔌 Ajout des adaptation UI
+add_subdirectory(adapters/Qt)
