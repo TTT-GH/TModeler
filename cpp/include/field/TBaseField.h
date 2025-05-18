@@ -83,7 +83,7 @@ protected:
     TF _onDelete = TF::NONE;
 
 public:
-    BaseField(){}
+    BaseField() : aggr(this, Operator::NONE){}
 
     virtual std::any& refValue();
     virtual std::any getValue() const;
@@ -104,6 +104,8 @@ public:
     static std::string NULL_STRING;
 
     Tx aggr;
+    void initTmpAggr();
+    bool hasAggr();
 
     Tx isNull();
     std::string targetField();

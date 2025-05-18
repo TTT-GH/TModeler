@@ -21,7 +21,7 @@ int TitemUpdate<Ts...>::put(std::shared_ptr<Tms<Ts...>> tms, std::shared_ptr<TFi
 
     if (result)
     {
-        TmsDeep::notifyChange(tms->modelClass(), false, true, false);
+        TmsDeep::notifyChange(tms->modelClass(), instances.keys(), false, true, false);
 
         return instances.size();
     }

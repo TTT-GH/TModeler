@@ -23,7 +23,7 @@ int TitemCreate<Ts...>::create(std::shared_ptr<Tms<Ts...>> tms, std::shared_ptr<
 
     if (result)
     {
-        TmsDeep::notifyChange(tms->modelClass(), true, false, false);
+        TmsDeep::notifyChange(tms->modelClass(), instances.keys(), true, false, false);
 
         return instances.size();
     }

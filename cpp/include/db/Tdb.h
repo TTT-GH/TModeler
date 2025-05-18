@@ -7,7 +7,6 @@
 
 #include "Ttable.h"
 
-
 class TdbDriver {
 public:
     virtual ~TdbDriver() {}
@@ -17,6 +16,7 @@ public:
     virtual bool executeSQL(const std::string& sql) = 0;
     virtual int64_t last_insert_rowid() = 0;
     virtual std::string executeQuery(const std::string& query) = 0;
+    virtual std::string executeQuery(const std::string& query, std::vector<std::vector<std::string>> fieldsKeys) = 0;
     virtual bool deleteDatabase(const std::string& dbName) = 0;
 
     virtual bool createTable(const std::string& tableScript) = 0;
@@ -44,18 +44,19 @@ public:
     // for table
     virtual bool tableExists(const std::string& name);
     virtual bool createTable(std::unique_ptr<Ttable> table);
-    virtual bool dropTable(const std::string& name);
+    virtual bool dropTable(const std::string& name, KeysType keys);
     virtual bool tableSaves(const std::string& name);
 
 
     int64_t last_insert_rowid();
     bool executeSQL(const std::string& sql);
     std::string executeQuery(const std::string& query);
+    std::string executeQuery(const std::string& query, std::vector<std::vector<std::string>> fieldsKeys);
 
 
     void addObserver(std::string modelName, const std::shared_ptr<TModelObserver>& observer);
     void removeObserver(std::string modelName, const std::shared_ptr<TModelObserver>& observer);
-    void notifyChange(std::string modelName, bool onCreate = false, bool onUpdate = false, bool onDelete = false);
+    void notifyChange(std::string modelName, KeysType keys, bool onCreate = false, bool onUpdate = false, bool onDelete = false);
 
 
     enum class Type { SQLITE, MYSQL, POSTGRESQL };

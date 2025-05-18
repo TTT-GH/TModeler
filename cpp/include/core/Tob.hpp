@@ -9,6 +9,53 @@
 #include <nlohmann/json.hpp>
 
 
+#include <tuple>
+#include <vector>
+#include <string>
+#include <type_traits>
+
+
+template<typename... Ts, std::size_t... Is>
+void assignFromJsonImpl(std::tuple<Ts...>& tupleObj, const Json& row, std::index_sequence<Is...>) {
+    // Pour chaque index I, on récupère le type Ti = Ts[I]
+    // Puis on fait appel à fromJson(instance<Ti>.serial(), row[I])
+    ((std::get<Is>(tupleObj).fromJson(Tob::instance<std::tuple_element_t<Is, std::tuple<Ts...>>>().serial(), row[Is])), ...);
+}
+
+template<typename... Ts>
+void assignFromJsonTuple(std::tuple<Ts...>& tupleObj, const Json& row) {
+    assignFromJsonImpl(tupleObj, row, std::index_sequence_for<Ts...>{});
+}
+
+template<typename... Ts>
+std::vector<std::tuple<Ts...>> Tob::parseTuples(const std::string& jsonStr) {
+    try {
+        static_assert((std::is_base_of<Tob, Ts>::value && ...),
+            "All types must inherit from Tob");
+
+        Json jsonArray = Json::parse(jsonStr);
+        std::vector<std::tuple<Ts...>> results;
+
+        for (const auto& row : jsonArray) {
+            if (!row.is_array() || row.size() != sizeof...(Ts))
+                continue;
+
+            std::tuple<Ts...> tupleObj;
+
+            assignFromJsonTuple(tupleObj, row); // <== assignation des champs
+
+            results.emplace_back(std::move(tupleObj));
+        }
+
+        return results;
+    }
+    catch (...) {
+        return {};
+    }
+}
+
+
+
 
 template<typename T>
 std::string Tob::data(std::vector<T>& objects) {

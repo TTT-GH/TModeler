@@ -32,16 +32,13 @@ Tlist<Ts...> Tms<Ts...>::filter()
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::filter(Tx& tx)
 {
-    return _instance != nullptr ? filter(*_instance, tx) : _tuplet != nullptr ? filter(_tuplet, tx) : filter();
+    return _tuplet != nullptr ? filter(_tuplet, tx) : _instance != nullptr ? filter(*_instance, tx) : filter();
 }
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::filter(Tx&& tx)
 {
-    return _instance != nullptr ? filter(*_instance, tx) : _tuplet != nullptr ? filter(_tuplet, tx) : filter();
+    return _tuplet != nullptr ? filter(_tuplet, tx) : _instance != nullptr ? filter(*_instance, tx) : filter();
 }
-
-
-
 
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::limit(int count)
@@ -49,28 +46,11 @@ Tlist<Ts...> Tms<Ts...>::limit(int count)
     return filter();
 }
 
-
-
-
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::order(Tx& tx)
 {
-    return order(*_instance, tx);
+    return _tuplet != nullptr ? order(_tuplet, tx) : order(*_instance, tx);
 }
-template <typename... Ts>
-Tlist<Ts...> Tms<Ts...>::order(T& item, Tx& tx)
-{
-    fillTx(tx, name(), item.clazz().getFields());
-
-    _builder->orderBy({
-        { tx.toString() }
-        });
-
-    return build();
-}
-
-
-
 
 template <typename... Ts>
 template<typename... Args>
@@ -84,18 +64,37 @@ Tlist<Ts...> Tms<Ts...>::group(Args&... args)
     ((
         [&]() {
             Tx tx(&args, Operator::GroupBy);
-            fillTx(tx, name(), item.clazz().getFields());
-            _builder->addGroupBy(tx.toString());
+
+            if (_tuplet != nullptr) groupByTuple(_tuplet, tx);
+            else groupByItem(*_instance, tx);
+
         }()
             ), ...);
 
     return build();
 }
 
+template <typename... Ts>
+void Tms<Ts...>::groupByItem(T& item, Tx& tx)
+{
+    fillTx(tx, name(), item.clazz().getFields());
+
+    _builder->addGroupBy(tx.toString());
+}
+
+template <typename... Ts>
+void Tms<Ts...>::groupByTuple(std::shared_ptr<TupleType> tuplet, Tx& tx)
+{
+    apply(*tuplet, tx);
+
+    _builder->addGroupBy(tx.toString());
+}
+
 
 template <typename... Ts>
 Tms<Ts...> Tms<Ts...>::join(JoinType type)
 {
+    joinType = type;
     return *this;
 }
 

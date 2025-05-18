@@ -14,7 +14,14 @@
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::all()
 {
-    return filter();
+    T i;
+    return with(i).filter();
+}
+template <typename... Ts>
+Tlist<Ts...> Tms<Ts...>::get(KeysType& keys)
+{
+    T i;
+    return with(i).filter(i._id >>= keys);
 }
 template <typename... Ts>
 typename Tms<Ts...>::T Tms<Ts...>::get(int k)

@@ -29,10 +29,14 @@ public:
     // Return the name of the model
     Tclass* modelClass();
     std::string name();
+    std::vector<std::string> fieldsKeys();
+    std::vector<std::vector<std::string>> allFieldsKeys();
     std::string dbId();
     bool clear();
+    bool migrate();
 
     Tlist<Ts...> all();
+    Tlist<Ts...> get(KeysType& keys);
     T get(int k);
     T getById(int id);
     T getByKey(int lid);
@@ -52,8 +56,11 @@ public:
 
     Tlist<Ts...> order(Tx& tx);
     Tlist<Ts...> order(T& item, Tx& x);
+    Tlist<Ts...> order(std::shared_ptr<TupleType> tuplet, Tx& tx);
     template<typename... Args>
     Tlist<Ts...> group(Args&... args);
+    void groupByItem(T& item, Tx& x);
+    void groupByTuple(std::shared_ptr<TupleType> tuplet, Tx& tx);
 
     Tlist<Ts...> build();
 
@@ -92,7 +99,7 @@ public:
     void onDelete(Callback c);
 
 public:
-    std::shared_ptr<TFilterBuilder> _builder;
+    std::shared_ptr<TFilterBuilder> _builder = nullptr;
     std::shared_ptr<TupleType> _tuplet = nullptr;
     
 private:
@@ -101,6 +108,8 @@ private:
     T* _instance = nullptr;
 
     std::shared_ptr<TModelCallback> _model_callback;
+
+    JoinType joinType = JoinType::INNER;
 
 
 

@@ -11,10 +11,8 @@
 
 #include "modeler/TModeler.h"
 #include "ms/TFilterBuilder.h"
-#include "Tlist.h"
 
-
-using Callback = std::function<void()>;
+using Callback = std::function<void(KeysType& keys)>;
 
 class TModelCallback : public TModelObserver
 {
@@ -36,23 +34,23 @@ public:
     void addOnDeleteCallback(Callback cb) { _onDeleteCallbacks.push_back(std::move(cb)); }
 
 
-    void onModelChange() override {
-        for (const auto& cb : _onChangeCallbacks) cb();
+    void onModelChange(KeysType& keys) override {
+        for (const auto& cb : _onChangeCallbacks) cb(keys);
     }
 
-    void onSave() override {
-        for (const auto& cb : _onSaveCallbacks) cb();
+    void onSave(KeysType& keys) override {
+        for (const auto& cb : _onSaveCallbacks) cb(keys);
     }
 
-    void onCreate() override {
-        for (const auto& cb : _onCreateCallbacks) cb();
+    void onCreate(KeysType& keys) override {
+        for (const auto& cb : _onCreateCallbacks) cb(keys);
     }
 
-    void onUpdate() override {
-        for (const auto& cb : _onUpdateCallbacks) cb();
+    void onUpdate(KeysType& keys) override {
+        for (const auto& cb : _onUpdateCallbacks) cb(keys);
     }
 
-    void onDelete() override {
-        for (const auto& cb : _onDeleteCallbacks) cb();
+    void onDelete(KeysType& keys) override {
+        for (const auto& cb : _onDeleteCallbacks) cb(keys);
     }
 };

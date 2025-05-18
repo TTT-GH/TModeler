@@ -21,6 +21,9 @@ template <typename... NewTypes>
 Tms<Ts..., NewTypes...> Tms<Ts...>::with(Ts&... ts, NewTypes&... args) {
     auto newTms = Tms<Ts..., NewTypes...>();
 
+    if (newTms._builder) {
+        _builder.reset();
+    }
     newTms._builder = std::make_shared<TFilterBuilder>();
     newTms._builder->from(name());
 
@@ -32,6 +35,9 @@ Tms<Ts..., NewTypes...> Tms<Ts...>::with(Ts&... ts, NewTypes&... args) {
 template <typename... Ts>
 Tms<Ts...> Tms<Ts...>::with(T& t)
 {
+    if (_builder) {
+        _builder.reset();
+    }
     _builder = std::make_shared<TFilterBuilder>();
     _builder->from(name());
     _instance = &t;
@@ -78,6 +84,28 @@ std::string Tms<Ts...>::name() {
     return _modelClass->getModelName();
 }
 
+// Get the model's fields
+template <typename... Ts>
+std::vector<std::string> Tms<Ts...>::fieldsKeys() {
+    prepare();
+
+    return TmsDeep::fieldsKeys(_modelClass);
+}
+
+// Get the models fields keys
+template <typename... Ts>
+std::vector<std::vector<std::string>> Tms<Ts...>::allFieldsKeys() {
+    std::vector<std::vector<std::string>> result;
+
+    // Pour chaque type T dans Ts, on crée un Tms<T> temporaire et on appelle fieldsKeys()
+    // On utilise l'initialisation d'une liste pour forcer l'expansion du pack
+    (void)std::initializer_list<int>{
+        (result.push_back(Tms<Ts>{}.fieldsKeys()), 0)... // virgule pour renvoyer 0
+    };
+
+    return result;
+}
+
 // Get the model's db name
 template <typename... Ts>
 std::string Tms<Ts...>::dbId() {
@@ -91,7 +119,7 @@ bool Tms<Ts...>::clear()
 {
     if (exists())
     {
-        bool result = TmsDeep::clear(_modelClass);
+        bool result = TmsDeep::clear(_modelClass, all().keys());
         if (result)
         {
             _isReady = false;

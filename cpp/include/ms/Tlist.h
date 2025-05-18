@@ -3,6 +3,10 @@
 #include <vector>
 #include <stdexcept>
 
+#include "field/Tx.h"
+
+#include "db/TdbObserver.h"
+
 template <typename... Ts>
 class Tms;
 
@@ -34,12 +38,12 @@ public:
 
     void tms(std::shared_ptr<Tms<Ts...>> tms) { _tms = tms; }
 
-    // Fonctions principales
     void add(const ValueType& value);
 
     ValueType& get(size_t index);
-    //const ValueType& get(size_t index) const;
     void set(size_t index, const ValueType& value);
+    template <typename Sp>
+    Sp& get(size_t i);
 
     void remove(size_t index);
     bool empty() const;
@@ -55,18 +59,14 @@ public:
 
     std::vector<ValueType> vector() const { return *this; }
 
+    KeysType keys();
 
-    Tlist<Ts...> filter(Tx&& x); //simple : where //bi-field : JOIN ON //aggr : HAVING
-
+    Tlist<Ts...> filter(Tx&& x);
 
     
     Tlist<Ts...> order(Tx&& tx);
     template<typename... Args>
     Tlist<Ts...> group(Args&... args);
-    /*
-    Tlist<Ts...> order(BaseField&... bf);
-    Tlist<Ts...> limit(int m);
-    Tlist<Ts...> Tms<Ts...>::distinct();*/
 
     Tlist<Ts...> build();
 
@@ -77,5 +77,9 @@ public:
     std::string data();
     ValueType first_cp();
     ValueType& first();
-    ValueType* last();
+    ValueType& last();
+    template <typename Sp>
+    Sp& first();
+    template <typename Sp>
+    Sp& last();
 };

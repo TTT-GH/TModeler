@@ -15,7 +15,7 @@ int TitemDelete<Ts...>::del(std::shared_ptr<Tms<Ts...>> tms, std::shared_ptr<TFi
 
     if (result)
     {
-        TmsDeep::notifyChange(tms->modelClass(), false, false, true);
+        TmsDeep::notifyChange(tms->modelClass(), instances.keys(), false, false, true);
 
         return instances.size();
     }

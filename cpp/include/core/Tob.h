@@ -25,14 +25,10 @@ private:
 
     Json toJson(Tserial& serializer);
     Json toJson(Tserial& serializer, AnyList fields);
-    void fromJson(Tserial& serializer, Json jsonObj);
     void fromJson(Tserial& serializer, Json jsonObj, AnyList fields);
 
 public:
-    int d1;
-    std::string d2;
-    double d3;
-    bool d4;
+    void fromJson(Tserial& serializer, Json jsonObj);
 
     virtual Tserial* serial_() {
         _serializer = instance<Tserial>();
@@ -46,20 +42,12 @@ public:
 
     virtual Tclass& clazz() {
         _class.fields({
-            {"d1", &d1},
-            {"d2", &d2},
-            {"d3", &d3},
-            {"d4", &d4}
             });
         return _class;
     };
 
     virtual Tclass* clazz2() {
         _class.fields({
-            {"d1", &d1},
-            {"d2", &d2},
-            {"d3", &d3},
-            {"d4", &d4}
             });
         return &_class;
     };
@@ -68,10 +56,6 @@ public:
     virtual Tclass* clazz3() {
         _class3 = new Tclass(*this, nullptr);
         _class3->fields({
-            {"d1", &d1},
-            {"d2", &d2},
-            {"d3", &d3},
-            {"d4", &d4}
             });
         return _class3;
     };
@@ -90,6 +74,9 @@ public:
     static std::string data(std::vector<T>& objects);
     template<typename T>
     static std::vector<T> parse(const std::string& jsonStr);
+    //
+    template<typename... Ts>
+    static std::vector<std::tuple<Ts...>> parseTuples(const std::string& jsonStr);
 
     template<typename T>
     static std::string data(const std::vector<T*>& objects);

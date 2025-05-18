@@ -21,6 +21,22 @@ typename Tlist<Ts...>::ValueType& Tlist<Ts...>::get(size_t index) {
 }
 
 template <typename... Ts>
+template <typename Sp>
+Sp& Tlist<Ts...>::get(size_t i) {
+    static_assert((std::is_same_v<T, Ts> || ...), "T must be one of Ts...");
+
+    if (i >= this->size())
+        throw std::out_of_range("Index out of range");
+
+    if constexpr (sizeof...(Ts) == 1) {
+        return (*this)[i];
+    }
+    else {
+        return std::get<Sp>((*this)[i]);
+    }
+}
+
+template <typename... Ts>
 void Tlist<Ts...>::set(size_t index, const ValueType& value) {
     if (index >= this->size())
         throw std::out_of_range("Index out of range");
@@ -81,6 +97,23 @@ int Tlist<Ts...>::lastIndexOf(const ValueType& value) const {
 template <typename... Ts>
 size_t Tlist<Ts...>::size() const {
     return BaseVector::size();
+}
+
+template <typename... Ts>
+KeysType Tlist<Ts...>::keys() {
+    KeysType keys_;
+    for (int i=0;i<size();i++)
+    {
+        auto& element = get<T>(i);
+
+        if constexpr (std::is_pointer<T>::value) {
+            keys_.push_back(element->key().get());
+        }
+        else {
+            keys_.push_back(element.key().get());
+        }
+    }
+    return keys_;
 }
 
 template <typename... Ts>
@@ -149,10 +182,42 @@ Tlist<Ts...> Tlist<Ts...>::orderBy(Tx&& tx)
 }*/
 
 
+/*
 template <typename... Ts>
 std::string Tlist<Ts...>::data()
 {
     return Tob::data<T>(*this);
+}
+*/
+template <typename... Ts>
+std::string Tlist<Ts...>:: data()
+{
+    if constexpr (sizeof...(Ts) == 1) {
+        return Tob::data<T>(*this);
+    }
+    else {
+        Json result = Json::array();
+
+        for (const auto& tup : *this) {
+            Json row = Json::array();
+
+            std::apply([&row](const Ts&... elems) {
+                (
+                    row.push_back(Json::parse(
+                        /*Tob::data<std::decay_t<decltype(elems)>>(
+                            std::vector<std::decay_t<decltype(elems)>>{ elems }
+                        )*/
+                        (std::vector<std::decay_t<decltype(elems)>>{ elems }).at(0).data()
+                    )),
+                    ...
+                    );
+                }, tup);
+
+            result.push_back(row);
+        }
+
+        return result.dump(4);
+    }
 }
 
 template <typename... Ts>
@@ -167,10 +232,28 @@ typename Tlist<Ts...>::ValueType& Tlist<Ts...>::first()
 {
     T obj;
     obj.null(true);
-    return empty() ? obj : get(0);
+    return empty() ? obj : get(0); 
 }
 template <typename... Ts>
-typename Tlist<Ts...>::ValueType* Tlist<Ts...>::last()
+typename Tlist<Ts...>::ValueType& Tlist<Ts...>::last()
 {
-    return empty() ? nullptr : &get(size() - 1);
+    T obj;
+    obj.null(true);
+    return empty() ? obj : get(size() - 1);
+}
+template <typename... Ts>
+template <typename Sp>
+Sp& Tlist<Ts...>::first()
+{
+    Sp obj;
+    obj.null(true);
+    return empty() ? obj : get<Sp>(0);
+}
+template <typename... Ts>
+template <typename Sp>
+Sp& Tlist<Ts...>::last()
+{
+    Sp obj;
+    obj.null(true);
+    return empty() ? obj : get<Sp>(size() - 1);
 }

@@ -69,6 +69,7 @@ class TModel : public Tob{
 
     virtual bool isNull();
     virtual void null(bool v);
+    virtual bool empty();
 private:
     bool _null = false;
 };

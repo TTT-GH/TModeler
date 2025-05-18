@@ -77,6 +77,9 @@ public:
     std::chrono::duration<double> operator-(const TimeField& other) const {
         return time() - other.time();
     }
+    Tx operator-() {
+        return TField<TimeField, std::string>::operator-();
+    }
     TimeField& operator=(const std::string& v) {
         set(v);
         return static_cast<TimeField&>(*this);

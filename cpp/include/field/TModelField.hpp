@@ -73,14 +73,24 @@ public:
     operator T() {
         return model();
     }
-
-
     Tx operator==(T& item) {
         Tx x(this, Operator::Equal);
-        //x._targetModel = Tms<T>().name();
         x.value = Tms<T>().name() + "." + item.keyName();
         return x;
     }
+    //#
+    Tx operator==(const int* val) {
+        return TField<ModelField<T>, int>::operator==(val);
+    }
+    Tx operator!=(const int* val) {
+        return TField<ModelField<T>, int>::operator!=(val);
+    }
+    Tx operator==(const int& val) {
+        return TField<ModelField<T>, int>::operator==(val);
+    }
+    /*
+
+
 
     Tx operator>(const T& val) {
         Tx x(this, Operator::GreaterThan);
@@ -106,5 +116,5 @@ public:
         Tx x(this, Operator::LessThanEqual);
         x.value = val;
         return x;
-    }
+    }*/
 };

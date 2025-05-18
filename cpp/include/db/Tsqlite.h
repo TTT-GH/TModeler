@@ -23,6 +23,7 @@ public:
     bool executeSQL(const std::string& sql) override;
     int64_t last_insert_rowid() override;
     std::string executeQuery(const std::string& query) override;
+    std::string executeQuery(const std::string& query, std::vector<std::vector<std::string>> fieldsKeys) override;
     bool deleteDatabase(const std::string& dbName) override;
 };
 

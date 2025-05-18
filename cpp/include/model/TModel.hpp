@@ -47,3 +47,10 @@ void TModel<T>::null(bool v)
 {
     _null = v;
 }
+
+template <typename T>
+bool TModel<T>::empty()
+{
+    auto d = data();
+    return isNull() || d=="null" || d=="{}";
+}

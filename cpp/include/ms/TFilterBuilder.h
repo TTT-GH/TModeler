@@ -4,10 +4,29 @@
 #include <string>
 #include <vector>
 #include <optional>
+
 #include "core/Tob.hpp"
 
 
+
 enum class JoinType {INNER, LEFT, RIGHT, FULL, CROSS};
+
+inline std::string strJoin(JoinType type)
+{
+    switch (type)
+    {
+    case JoinType::INNER:
+        return "INNER";
+    case JoinType::LEFT:
+        return "LEFT";
+    case JoinType::RIGHT:
+        return "RIGHT";
+    case JoinType::FULL:
+        return "FULL";
+    case JoinType::CROSS:
+        return "CROSS";
+    }
+}
 
 // --- Structures de clause ---
 struct SelectClause {
@@ -50,6 +69,8 @@ public:
     TFilterBuilder& addGroupBy(const std::string& column);
 
     std::string buildSQL() const;
+
+    std::vector<std::vector<std::string>> fieldsKeys;
 
 private:
     std::unique_ptr<Json> _query;
