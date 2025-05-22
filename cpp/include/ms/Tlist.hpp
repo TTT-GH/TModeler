@@ -2,6 +2,8 @@
 
 #include "Tms.hpp"
 
+#include <utility>
+
 template <typename... Ts>
 Tlist<Ts...>::Tlist(std::shared_ptr<Tms<Ts...>> tms) : std::vector<BaseType>(), _tms(tms){}
 
@@ -286,4 +288,43 @@ Sp& Tlist<Ts...>::last()
     Sp obj;
     obj.null(true);
     return empty() ? obj : get<Sp>(size() - 1);
+}
+
+
+
+
+
+
+template<typename... Ts>
+template<typename T>
+Tlist<T> Tlist<Ts...>::select() const {
+    static_assert(detail::count_in_tuple<T, std::tuple<Ts...>>::value == 1,
+        "Type must occur exactly once in Tlist");
+
+    Tlist<T> result;
+    for (const auto& val : *this) {
+        if constexpr (sizeof...(Ts) == 1) {
+            result.push_back(val);
+        }
+        else {
+            result.push_back(std::get<T>(val));
+        }
+    }
+    return result;
+}
+
+template<typename... Ts>
+template <typename First, typename Second, typename... Rest>
+Tlist<First, Second, Rest...> Tlist<Ts...>::select() const {
+
+    Tlist<First, Second, Rest...> result;
+
+    for (const auto& row : *this) {
+        result.push_back(std::make_tuple(
+            std::get<First>(row),
+            std::get<Second>(row),
+            std::get<Rest>(row)...
+        ));
+    }
+    return result;
 }

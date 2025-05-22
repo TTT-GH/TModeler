@@ -10,6 +10,21 @@
 template <typename... Ts>
 class Tms;
 
+
+namespace detail {
+
+    // Compte le nombre d'occurrences du type T dans un std::tuple<Types...>
+    template<typename T, typename Tuple>
+    struct count_in_tuple;
+
+    template<typename T, typename... Types>
+    struct count_in_tuple<T, std::tuple<Types...>> {
+        static constexpr std::size_t value = (0 + ... + (std::is_same_v<T, Types> ? 1 : 0));
+    };
+
+} // namespace detail
+
+
 template <typename... Ts>
 class Tlist : public std::vector<
     typename std::conditional<
@@ -28,6 +43,7 @@ public:
     using BaseVector = std::vector<BaseType>;
     using ValueType = BaseType;
     using T = typename std::tuple_element<0, std::tuple<Ts...>>::type;
+    using TupleType = std::tuple<std::reference_wrapper<Ts>...>;
 private:
     std::shared_ptr<Tms<Ts...>> _tms;
 
@@ -86,4 +102,15 @@ public:
     Sp& first();
     template <typename Sp>
     Sp& last();
+
+private:
+    template <typename... Types, size_t... Is>
+    Tlist<Types...> select_impl(std::index_sequence<Is...>) const;
+
+public:
+    template <typename T>
+    Tlist<T> select() const;
+
+    template <typename First, typename Second, typename... Rest>
+    Tlist<First, Second, Rest...> select() const;
 };

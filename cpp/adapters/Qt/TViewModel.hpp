@@ -1,6 +1,4 @@
-#ifndef TVIEWMODEL_HPP
-#define TVIEWMODEL_HPP
-
+#pragma once
 
 #include <QAbstractListModel>
 #include <QHash>
@@ -22,6 +20,11 @@
 #include <QModelIndex>
 #include <string>
 
+
+template<typename T>
+class TItem;
+
+
 template<typename T>
 class TViewModel : public QAbstractListModel {
 
@@ -29,19 +32,22 @@ public:
     explicit TViewModel(QObject* parent = nullptr)
         : QAbstractListModel(parent)
     {
-        m_objects = tms.all();
+        m_objects = all();
 
-        auto mc = tms.modelClass();
-        auto fields = mc->getFields();
+        auto fieldsKeys = tms.fieldsKeys();
 
         int role = Qt::UserRole + 1;
-        for (const auto& [name, field] : fields) {
-            m_roles[role] = name.c_str();
-            m_roleNames[name] = role;
+        for (const auto& key : fieldsKeys) {
+            m_roles[role] = key.c_str();
+            m_roleNames[key] = role;
             role++;
         }
 
         observers();
+    }
+
+    virtual Tlist<T> all(){
+        return tms.all();
     }
 
     virtual void observers(){
@@ -78,7 +84,7 @@ public:
                     int index = m_objects.indexOf(key);
                     if (index >= 0) {
                         m_objects.get(index).parse(tms.get(key).data());
-                        emit dataChanged(this->index(index), this->index(index));
+                        emit_dataChanged(this->index(index, 0), this->index(index, 0), roleNames().keys());
                         refresh();
                     }
                 }
@@ -126,15 +132,18 @@ public:
 
     Q_INVOKABLE void refresh() {
         beginResetModel();
-        Tms<T> tms;
-        m_objects = tms.all();
+        m_objects = all();
         endResetModel();
     }
 
 
 
 
-    Q_INVOKABLE QVariantMap get(int index) {
+    // CRUD
+    // ====================== //
+    // Fonctions utilitaires CRUD
+    // ====================== //
+    Q_INVOKABLE QVariantMap data(int index) {
         QVariantMap result;
 
         if (index < 0 || index >= m_objects.size())
@@ -158,6 +167,21 @@ public:
         return result;
     }
 
+    template<typename Ti>
+    Q_INVOKABLE QObject* get(int index) {
+        if (index < 0 || index >= m_objects.size())
+            return nullptr;
+
+        return new Ti(index, this);
+    }
+
+    Q_INVOKABLE QObject* get(int index) {
+        if (index < 0 || index >= m_objects.size())
+            return nullptr;
+
+        return new TItem<T>(index, this);
+    }
+
     Q_INVOKABLE bool create(const QVariantMap& data) {
         T obj;
 
@@ -168,14 +192,19 @@ public:
         QJsonDocument doc(jsonObj);
         obj.parse(doc.toJson(QJsonDocument::Compact).toStdString());
 
-        obj.create();
+        if (!obj.create()) {
+            emit_errorOccurred("Erreur lors de la création.");
+            return false;
+        }
 
         return true;
     }
 
     Q_INVOKABLE bool update(int index, const QVariantMap& data) {
-        if (index < 0 || index >= m_objects.size())
+        if (index < 0 || index >= m_objects.size()){
+            emit_errorOccurred("Index invalide pour la mise à jour.");
             return false;
+        }
 
         T& obj = m_objects[index];
 
@@ -186,18 +215,26 @@ public:
         QJsonDocument doc(jsonObj);
         obj.parse(doc.toJson(QJsonDocument::Compact).toStdString());
 
-        obj.update();
+        if (!obj.update()) {
+            emit_errorOccurred("Erreur lors de la mise à jour.");
+            return false;
+        }
 
         return true;
     }
 
     Q_INVOKABLE bool remove(int index) {
-        if (index < 0 || index >= m_objects.size())
+        if (index < 0 || index >= m_objects.size()){
+            emit_errorOccurred("Index invalide pour la suppression.");
             return false;
+        }
 
         T& obj = m_objects[index];
 
-        obj.del();
+        if (!obj.del()) {
+            emit_errorOccurred("Erreur lors de la suppression.");
+            return false;
+        }
 
         return true;
     }
@@ -208,6 +245,99 @@ public:
 
 
 
+
+    // more
+    // ====================== //
+    // Fonctions utilitaires supplémentaires
+    // ====================== //
+
+    // Retourne true si la liste d'objets est vide
+    Q_INVOKABLE bool isEmpty() const {
+        return m_objects.empty();
+    }
+
+    // Donne l’index d’un objet par sa clé (_id)
+    Q_INVOKABLE int indexOf(int key) const {
+        return m_objects.indexOf(key);
+    }
+
+    // Retourne un champ particulier (par son nom) d’un objet à l’index donné
+    Q_INVOKABLE QVariant field(int index, const QString& name) const {
+        if (index < 0 || index >= m_objects.size())
+            return QVariant();
+
+        T obj = m_objects[index];
+        std::string json = obj.data();
+
+        QJsonParseError parseError;
+        QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(json), &parseError);
+        if (parseError.error != QJsonParseError::NoError || !doc.isObject())
+            return QVariant();
+
+        QJsonObject objJson = doc.object();
+        QJsonValue val = objJson.value(name);
+        return val.isUndefined() ? QVariant() : val.toVariant();
+    }
+
+    // Donne accès brut à la liste des objets
+    const Tlist<T>& objects() const {
+        return m_objects;
+    }
+
+    // Permet de filtrer les objets dans C++ (pas QML) avec une fonction lambda
+    void filterInCpp(std::function<bool(const T&)> predicate) {
+        beginResetModel();
+        Tlist<T> filtered;
+        for (const T& obj : m_objects) {
+            if (predicate(obj)) {
+                filtered.add(obj);
+            }
+        }
+        m_objects = filtered;
+        endResetModel();
+    }
+
+    // méthode de filtrage simple (clé == valeur)
+    Q_INVOKABLE void filter(const QString& key, const QVariant& value) {
+        beginResetModel();
+        Tlist<T> filtered;
+        for (int i = 0; i < m_objects.size(); ++i) {
+            auto obj = m_objects[i];
+            QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(obj.data()));
+            if (doc.isObject()) {
+                QJsonObject json = doc.object();
+                if (json.contains(key) && json.value(key).toVariant() == value) {
+                    filtered.add(obj);
+                }
+            }
+        }
+        m_objects = filtered;
+        endResetModel();
+        emit_countChanged();
+    }
+
+    // méthode de chargement partiel (pagination)
+    Q_INVOKABLE void loadMore(int offset, int limit) {
+        beginResetModel();
+        Tlist<T> list = all();
+        Tlist<T> partial;
+        for (int i = offset; i < offset + limit && i < list.size(); ++i) {
+            partial.add(list[i]);
+        }
+        m_objects = partial;
+        endResetModel();
+        emit_countChanged();
+    }
+
+signals:
+    void errorOccurred(const QString& message);
+    void countChanged();
+
+protected:
+    virtual void emit_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) {}
+    virtual void emit_errorOccurred(const QString& message) {}
+    virtual void emit_countChanged() {}
+
 protected:
     Tms<T> tms;
     Tlist<T> m_objects;
@@ -216,4 +346,3 @@ protected:
 };
 
 
-#endif // TVIEWMODEL_HPP
