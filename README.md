@@ -33,7 +33,7 @@ class Person : public TModel<Person> {
 
 Person person;
 person.id = 100;
-person.name = "Olivier TAMBO";
+person.name = "Lambda";
 person.design = "Admin";
 person.meta = json;
 person.ratio = 0.5;

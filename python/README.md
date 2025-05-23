@@ -155,9 +155,9 @@ val messager1 = Messager().init().apply {
     photo.set(TMedia().init().apply { description.set("pp") })
 }
 
-val messager2 = Messager().init().apply { name.set("Michel Tambo $i") }
-val messager3 = Messager().init().apply { name.set("Annie Tambo $i") }.also { it.save() }
-val messager4 = Messager().init().apply { name.set("Gaby Tambo $i") }.also { it.save() }
+val messager2 = Messager().init().apply { name.set("Lambda $i") }
+val messager3 = Messager().init().apply { name.set("Lambda 2 $i") }.also { it.save() }
+val messager4 = Messager().init().apply { name.set("Lambda 3 $i") }.also { it.save() }
 
 val chanel1 = Chanel().init().apply {
     name.set("MAIN Chanel $i")
@@ -191,7 +191,7 @@ listOf(
 listOf("Hello!!!", "How!!!", "fine!!!", "cool!!!").forEachIndexed { index, text ->
     Message().init().apply {
         content.set("$text $i")
-        //loc.set(LatLng(3.3265, 9.32658))
+        loc.set(LatLng(3.3265, 9.32658))
         creator.set(listOf(messager1, messager2, messager3, messager4)[index])
         messaging.set(messaging2)
         save()
@@ -261,7 +261,7 @@ The framework offers expressive, type-safe filtering and joining on in-memory mo
 
 ```kotlin
 messager = Messager.tms.all()
-    .filter { it.name.get().uppercase().contains("OLIVIER") }
+    .filter { it.name.get().uppercase().contains("Lambda") }
     .first()
 ```
 

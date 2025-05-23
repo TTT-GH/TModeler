@@ -181,12 +181,12 @@ comm();
 
 // Create clients
 if (Client::tms.all().empty()) {
-    cl1.name = "Olivier TAMBO";
+    cl1.name = "Lambda";
     cl1.age = 15;
     cl1.height = 1.70;
     cl1.dob = "2010-01-01";
     // ...
-    cl5.name = "Annie TAMBO";
+    cl5.name = "Lambda 2";
     cl5.age = 19;
     cl5.height = 1.50;
     cl5.dob = "2015-05-10";
@@ -197,7 +197,7 @@ if (Client::tms.all().empty()) {
     }
     cl2.save(); cl3.save(); cl4.save(); cl5.save();
 
-    cl4.name = "Olivier TAMBO";  // Update
+    cl4.name = "Lambda 3";  // Update
     cl4.save();
 
     cl5.del();  // Delete
@@ -254,7 +254,7 @@ if (!jf) {
     jf += { { "object", jf.json() } };
 
     jf += {
-        { "name", "olivier" },
+        { "name", "Lambda" },
         { "age", 24 },
         { "poids", 80.3 }
     };
@@ -267,7 +267,7 @@ if (!jf) {
 
 Person person;
 person.id = 100;
-person.name = "Olivier TAMBO";
+person.name = "Lambda 4";
 person.design = "Admin";
 person.meta = jf.json();  // Save complex JSON data
 person.ratio = 0.5;
@@ -361,8 +361,8 @@ using Expr::cm;
 ```cpp
 auto ft = Person::tms.with(p).filter(
     (p.dob >= "2000-11-04") &&
-    (p.name != "Michel TAMBO") &&
-    (p.name != "Gaby TAMBO") &&
+    (p.name != "Lambda") &&
+    (p.name != "Lambda 2") &&
     (p._id >>= {186, 187})
 );
 Log::d(ft.data());
@@ -377,7 +377,7 @@ auto all = Person::tms.all();
 
 auto filter = Person::tms.with(p).filter(
     (p.dob >= "2000-11-04") &&
-    (p.name != "Michel TAMBO") &&
+    (p.name != "Lambda 3") &&
     (p.meta != "") &&
     (p._id != 2) &&
     (p.ratio != 24.0) &&
@@ -387,14 +387,14 @@ auto filter = Person::tms.with(p).filter(
 // Filter with null, like and boolean checks
 auto filter2 = Person::tms.with(p).filter(
     (p._id >= 20) &&
-    (p.name % "%TAMBO%") &&      // SQL LIKE
+    (p.name % "%Lambda%") &&      // SQL LIKE
     (p.id == nullptr)            // NULL comparison
 );
 
 // Complex negated filters
 auto filter3 = Person::tms.with(p).filter(
     (p._id >>= {7, 8, 9, 10, 11}) &&
-    !(p.name >>= {"Pat TAMBO", "Michel TAMBO"})
+    !(p.name >>= {"Lambda", "Lambda 2"})
 );
 ```
 #### ✅ Available Operators
