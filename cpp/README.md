@@ -549,3 +549,65 @@ Chaque type `T` possède un singleton de type `Tms<T>` accessible via `T::tms`.
 | `onModelChange(f)` | Callback global sur les changements|
 
 ---
+
+## Communication UI – Test ViewModel
+
+This example demonstrates how to connect a `TViewModel` (ClientViewModel) with a QtQuick UI to manage a list of clients. The goal is to test reading and writing operations through the model and reflect changes in the user interface.
+
+### C++ Model Definition
+```cpp
+// Model definition using the framework's macros
+class Client : public TModel<Client> {
+    TM_SCHEMA(Client, "models.shops", TF(name), TF(email), TF(friends))
+
+    TextField name;
+    TextField email;
+    ListField<Client> friends;
+};
+
+// Item wrapper to expose to QML
+class ClientItem : public TItem<Client> {
+    Q_OBJECT
+    TM_QML_ITEM
+};
+
+// ViewModel exposed to QML
+class ClientViewModel : public TViewModel<Client> {
+    Q_OBJECT
+    TM_QML_VM(Client, ClientItem)
+};
+```
+
+### QML UI (Read & Write Test)
+```qml
+property var item: clientModel.get(index)
+
+Row {
+    spacing: 10
+    anchors.verticalCenter: parent.verticalCenter
+
+    Text {
+        text: item.data.name + " (" + item.data.email + ")"
+        font.bold: index === listView.currentIndex
+    }
+}
+
+//...
+
+Button {
+    text: "Update"
+    enabled: selectedIndex >= 0
+    onClicked: {
+        let item = clientModel.get(selectedIndex)
+        let current = item.data
+        current.name = nameInput.text
+        current.email = emailInput.text
+        item.data = current
+        nameInput.text = ""
+        emailInput.text = ""
+        selectedIndex = -1
+    }
+}
+```
+
+---
