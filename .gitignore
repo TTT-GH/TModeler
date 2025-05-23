@@ -35,6 +35,8 @@
 *.iml
 .gradle/
 build/
+external/
+dependencies/
 captures/
 .externalNativeBuild/
 .cxx/
