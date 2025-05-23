@@ -118,20 +118,17 @@ template <typename... Ts>
 int Tms<Ts...>::create(Tlist<T*>& instances)
 {
     prepare();
-    TitemCreate<Ts...>::create(std::make_shared<Tms<T>>(*this), _builder, instances);
-    return 0;
+    return TitemCreate<Ts...>::create(std::make_shared<Tms<T>>(*this), _builder, instances);
 }
 template <typename... Ts>
 int Tms<Ts...>::update(Tlist<T> instances)
 {
     prepare();
-    TitemUpdate<Ts...>::put(std::make_shared<Tms<T>>(*this), _builder, instances);
-    return 0;
+    return TitemUpdate<Ts...>::put(std::make_shared<Tms<T>>(*this), _builder, instances);
 }
 template <typename... Ts>
 int Tms<Ts...>::del(Tlist<T> instances)
 {
     prepare();
-    TitemDelete<Ts...>::del(std::make_shared<Tms<T>>(*this), _builder, instances);
-    return 0;
+    return TitemDelete<Ts...>::del(std::make_shared<Tms<T>>(*this), _builder, instances);
 }
