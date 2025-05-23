@@ -30,3 +30,47 @@
 *.exe
 *.out
 *.app
+
+# === Fichiers et dossiers Android ===
+*.iml
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+local.properties
+
+# === Fichiers Android Studio/IntelliJ IDEA ===
+.idea/
+*.iws
+*.ipr
+*.bak
+*.swp
+*.tmp
+
+# === Fichiers générés ===
+*.class
+*.dex
+*.apk
+*.ap_
+*.log
+
+# === Cache, OS et autres fichiers inutiles ===
+*.DS_Store
+*.log
+*.swo
+*.swp
+*.orig
+
+# === fichiers de configuration système ===
+*.keystore
+*.jks
+
+# === fichiers de crash ou stacktraces ===
+hs_err_pid*
+
+# === fichiers de test locaux ===
+test-output/
+
+# === fichiers temporaires ===
+tmp/
