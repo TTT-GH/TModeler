@@ -2,22 +2,21 @@ package com.tm.tests._launcher;
 
 import android.app.Application;
 
-import java.util.List;
-
-import api.ttt.db.modeler.db.TModeler;
-import api.ttt.db.modeler.db.Tdb;
-import api.ttt.db.modeler.db.TModelerCallback;
-import api.ttt.db.modeler.synchronizer.TSyncMaster;
 import com.tm.tests.models.chat.chanels.Chanel;
 import com.tm.tests.models.chat.chanels.ChanelContext;
 import com.tm.tests.models.chat.chanels.ChanelEditor;
-import com.tm.tests.models.chat.chanels.ChanelType;
 import com.tm.tests.models.chat.massagers.Messager;
 import com.tm.tests.models.chat.massagers.MessagerRole;
 import com.tm.tests.models.chat.messages.Message;
 import com.tm.tests.models.chat.messagins.Messaging;
 import com.tm.tests.models.chat.messagins.MessagingMember;
 import com.tm.tests.models.chat.messagins.MessagingType;
+
+import java.util.List;
+
+import api.ttt.db.modeler.db.Tdb;
+import api.ttt.db.modeler.modeler.TModeler;
+import api.ttt.db.modeler.modeler.TModelerCallback;
 
 public class App extends Application {
 
@@ -55,19 +54,12 @@ public class App extends Application {
             }
 
             @Override
-            public void onServerAccessChange(boolean connected) {
-                /*
-                if(!MainActivity.log("Server Connected "+connected))
-                    TModeler.serverLink.offline();
-                if(connected)
-                    TSyncMaster.listener(MainActivity.syncListener()).sync(1000);*/
-            }
+            public void onServerAccessChange(boolean connected) {}
             @Override
             public void onPrepareSync() {
                 Chanel.tms.commit();
                 ChanelContext.tms.commit();
                 ChanelEditor.tms.commit();
-                ChanelType.tms.commit();
                 //
                 Messager.tms.commit();
                 MessagerRole.tms.commit();

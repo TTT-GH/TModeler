@@ -1,10 +1,10 @@
 package com.tm.tests.models.chat.massagers;
 
-import api.ttt.db.modeler.base.operations.Top;
+import api.ttt.db.modeler.core.operations.Top;
+import api.ttt.db.modeler.field.CharField;
 import api.ttt.db.modeler.model.base.TModel;
-import api.ttt.db.modeler.model.fields.CharField;
 import api.ttt.db.modeler.model.serializers.TMSerial;
-import api.ttt.db.modeler.ms.TMS;
+import api.ttt.db.modeler.ms.Tms;
 import api.ttt.db.modeler.synchronizer.utils.TServerInfos;
 
 public class MessagerRole extends TModel<MessagerRole> {
@@ -13,7 +13,9 @@ public class MessagerRole extends TModel<MessagerRole> {
 
 
     public static final TMSerial<MessagerRole> serial = new TMSerial<MessagerRole>(MessagerRole.class);
-    public static final TMS<MessagerRole> tms = initialize(MessagerRole.class, serial);
+    public static final Tms<MessagerRole> tms = initialize(MessagerRole.class, serial);
+
+
     ///----------------------------------------------------------------------------------
 
     @Override

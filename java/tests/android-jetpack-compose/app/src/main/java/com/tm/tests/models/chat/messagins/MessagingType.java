@@ -1,10 +1,10 @@
 package com.tm.tests.models.chat.messagins;
 
-import api.ttt.db.modeler.base.operations.Top;
+import api.ttt.db.modeler.core.operations.Top;
+import api.ttt.db.modeler.field.CharField;
 import api.ttt.db.modeler.model.base.TModel;
-import api.ttt.db.modeler.model.fields.CharField;
 import api.ttt.db.modeler.model.serializers.TMSerial;
-import api.ttt.db.modeler.ms.TMS;
+import api.ttt.db.modeler.ms.Tms;
 import api.ttt.db.modeler.synchronizer.utils.TServerInfos;
 
 public class MessagingType extends TModel<MessagingType> {
@@ -13,7 +13,7 @@ public class MessagingType extends TModel<MessagingType> {
 
 
     public static final TMSerial<MessagingType> serial = new TMSerial<MessagingType>(MessagingType.class);
-    public static final TMS<MessagingType> tms = initialize(MessagingType.class, serial);
+    public static final Tms<MessagingType> tms = initialize(MessagingType.class, serial);
 
 
     ///----------------------------------------------------------------------------------

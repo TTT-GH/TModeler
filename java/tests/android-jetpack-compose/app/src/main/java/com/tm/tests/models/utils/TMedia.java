@@ -1,10 +1,9 @@
 package com.tm.tests.models.utils;
 
 import api.ttt.db.modeler.model.base.TModel;
-import api.ttt.db.modeler.model.fields.CharField;
-import api.ttt.db.modeler.model.fields.ImageField;
+import api.ttt.db.modeler.field.*;
 import api.ttt.db.modeler.model.serializers.TMSerial;
-import api.ttt.db.modeler.ms.TMS;
+import api.ttt.db.modeler.ms.Tms;
 
 /**
  * Media federation allow central media control
@@ -17,5 +16,5 @@ public class TMedia extends TModel<TMedia> {
 
 
     public static final TMSerial<TMedia> serial = new TMSerial<TMedia>(TMedia.class);//With custom Serial
-    public static final TMS<TMedia> tms = initialize(TMedia.class, serial);//With custom Serial
+    public static final Tms<TMedia> tms = initialize(TMedia.class, serial);//With custom Serial
 }

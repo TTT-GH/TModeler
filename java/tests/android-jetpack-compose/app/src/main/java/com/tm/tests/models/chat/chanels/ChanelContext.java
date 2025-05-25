@@ -1,10 +1,10 @@
 package com.tm.tests.models.chat.chanels;
 
-import api.ttt.db.modeler.base.operations.Top;
+import api.ttt.db.modeler.core.operations.Top;
+import api.ttt.db.modeler.field.CharField;
 import api.ttt.db.modeler.model.base.TModel;
-import api.ttt.db.modeler.model.fields.CharField;
 import api.ttt.db.modeler.model.serializers.TMSerial;
-import api.ttt.db.modeler.ms.TMS;
+import api.ttt.db.modeler.ms.Tms;
 import api.ttt.db.modeler.synchronizer.utils.TServerInfos;
 
 public class ChanelContext extends TModel<ChanelContext> {
@@ -13,7 +13,9 @@ public class ChanelContext extends TModel<ChanelContext> {
 
 
     public static final TMSerial<ChanelContext> serial = new TMSerial<ChanelContext>(ChanelContext.class);
-    public static final TMS<ChanelContext> tms = initialize(ChanelContext.class, serial);
+    public static final Tms<ChanelContext> tms = initialize(ChanelContext.class, serial);
+
+
     ///----------------------------------------------------------------------------------
 
     @Override

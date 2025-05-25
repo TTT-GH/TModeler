@@ -6,6 +6,10 @@ TModeler est une bibliothèque ORM (Object-Relational Mapping) pour Java qui per
 
 ## Installation
 
+```bash
+python install_tmodeler.py 1.0.5
+```
+
 ### Prérequis
 
 ### Dépendances
