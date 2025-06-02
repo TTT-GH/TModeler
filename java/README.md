@@ -6,11 +6,79 @@ TModeler est une bibliothèque ORM (Object-Relational Mapping) pour Java qui per
 
 ## Installation
 
+Ce guide explique comment installer localement une version spécifique de la librairie `TModeler` dans votre dépôt Maven, en utilisant le script `maven_install.bat`.
+
+---
+
 ### Prérequis
 
-### Dépendances
+- Java JDK installé
+- [Maven](https://maven.apache.org/) installé et accessible via la ligne de commande
+- Un terminal PowerShell ou CMD avec droits d’exécution
+- cloner le depot
+```pgsql
+TModeler/
+├── java/
+│ ├── maven_install.bat
+│ └── artifacts/
+│ └── ...
+```
 
-### Compilation
+---
+
+### 🚀 Commande d'installation
+
+
+> ⚠️ Remplace `T1.0.24` par toute autre version si nécessaire, en conservant la même structure de dossiers.
+
+---
+
+Dans le dossier `java/`, exécutez la commande suivante :
+
+```bash
+.\maven_install.bat T1.0.24
+```
+
+---
+
+### 📦 Intégration dans un projet Maven
+
+Une fois installée, ajoutez la dépendance suivante dans votre pom.xml :
+
+```xml
+<dependency>
+    <groupId>com.ttt.api</groupId>
+    <artifactId>TModeler</artifactId>
+    <version>T1.0.24</version>
+    <type>aar</type>
+</dependency>
+```
+
+---
+
+### 📦 Intégration dans un projet Android Studio
+
+Une fois le .aar installé localement avec maven_install.bat, vous pouvez l'ajouter à votre projet Android Studio de la manière suivante :
+
+1. Ajoutez la dépendance dans build.gradle (Module: app) :
+
+```groovy
+dependencies {
+    implementation 'com.ttt.api:TModeler:T1.0.24@aar'
+}
+```
+
+2. Assurez-vous que mavenLocal() est bien présent dans la section repositories de votre build.gradle :
+
+```groovy
+repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+}
+```
+
+---
 
 ## 📦 Tms<T> - TTT Model System
 
