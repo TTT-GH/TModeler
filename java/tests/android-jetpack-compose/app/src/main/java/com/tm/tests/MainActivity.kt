@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         testTM();
+
+        Thc.test();
     }
 
     private fun testTM(){

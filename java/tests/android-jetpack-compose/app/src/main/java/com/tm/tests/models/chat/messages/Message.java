@@ -24,13 +24,14 @@ public class Message extends TModel<Message> {
 
 
     ///----------------------------------------------------------------------------------
-
+    // chaque model à cette fenetre pour lui permettre de configurer les acces à l'API(ou les APIs) qui vont lui permettre de s'auto synchroniser
+    // Noter que le Meme mecaniste existe en version python, et les API sont auto générer labas avec le trio : TM-TSM-THC
     @Override
     public TServerInfos onSync() {
         return super.onSync().with(
                 "im/messages/",
                 null,
-                ()->{}
+                ()->{} // ce param est une interface observatrice de la sync dédié au model preci : onSyncDone
         );
     }
 

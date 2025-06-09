@@ -17,6 +17,8 @@ import java.util.List;
 import api.ttt.db.modeler.db.Tdb;
 import api.ttt.db.modeler.modeler.TModeler;
 import api.ttt.db.modeler.modeler.TModelerCallback;
+import api.ttt.db.modeler.synchronizer.TSyncMaster;
+import api.ttt.db.modeler.synchronizer.interfaces.TSyncCallback;
 
 public class App extends Application {
 
@@ -34,9 +36,9 @@ public class App extends Application {
                 bases.add(Tdb.connect("FirstTdb"));
                 return bases;
             }
+            // ici on peut ajouter des paramettres specific de synchronisation
             @Override
-            public String onLoadServerHost() {/// - Notify network security config
-                //return "http://spoozy.app/tgps";
+            public String onLoadServerHost() {
                 return "http://192.168.236.174:8000";
             }
             @Override
@@ -54,9 +56,21 @@ public class App extends Application {
             }
 
             @Override
-            public void onServerAccessChange(boolean connected) {}
+            public void onServerAccessChange(boolean connected) {
+                if(connected){
+                    TSyncMaster.listener(new TSyncCallback(){
+                        // pluysieur =s fenetre disponible pour suivre l'auto synchronisation des models autorisé
+
+                        @Override
+                        public void syncDone() {
+                            // quand tous les model sont sync
+                        }
+                    }).sync(1000); // période de synchronisation
+                }
+            }
             @Override
             public void onPrepareSync() {
+                /// tres important ici, il sagit d'une fonction du TM (TModeler) dont le role est de communiquer au TSM des changement survenu dans les models de données
                 Chanel.tms.commit();
                 ChanelContext.tms.commit();
                 ChanelEditor.tms.commit();

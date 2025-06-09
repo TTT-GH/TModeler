@@ -11,6 +11,7 @@ import api.ttt.db.modeler.field.ModelField;
 import api.ttt.db.modeler.model.base.TModel;
 import api.ttt.db.modeler.model.serializers.TMSerial;
 import api.ttt.db.modeler.ms.Tms;
+import api.ttt.db.modeler.synchronizer.interfaces.TSyncCallback;
 import api.ttt.db.modeler.synchronizer.utils.TServerInfos;
 
 /**
@@ -26,13 +27,8 @@ public class Messager extends TModel<Messager> {
     public static final Tms<Messager> tms = initialize(Messager.class, serial);
 
 
-    public boolean isActive(){
-        return false;
-    }
-
-
     ///----------------------------------------------------------------------------------
-
+    // dédié a la sync du Messager
     @Override
     public TServerInfos onSync() {
         return super.onSync().with(
@@ -45,6 +41,11 @@ public class Messager extends TModel<Messager> {
     ///----------------------------------------------------------------------------------
 
     ///----------------------------------------------------------------------------------
+
+
+    public boolean isActive(){
+        return false;
+    }
 
 
     public String name(){
