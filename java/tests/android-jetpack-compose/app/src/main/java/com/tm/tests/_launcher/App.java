@@ -2,22 +2,23 @@ package com.tm.tests._launcher;
 
 import android.app.Application;
 
-import java.util.List;
-
-import api.ttt.db.modeler.db.TModeler;
-import api.ttt.db.modeler.db.Tdb;
-import api.ttt.db.modeler.db.TModelerCallback;
-import api.ttt.db.modeler.synchronizer.TSyncMaster;
 import com.tm.tests.models.chat.chanels.Chanel;
 import com.tm.tests.models.chat.chanels.ChanelContext;
 import com.tm.tests.models.chat.chanels.ChanelEditor;
-import com.tm.tests.models.chat.chanels.ChanelType;
 import com.tm.tests.models.chat.massagers.Messager;
 import com.tm.tests.models.chat.massagers.MessagerRole;
 import com.tm.tests.models.chat.messages.Message;
 import com.tm.tests.models.chat.messagins.Messaging;
 import com.tm.tests.models.chat.messagins.MessagingMember;
 import com.tm.tests.models.chat.messagins.MessagingType;
+
+import java.util.List;
+
+import api.ttt.db.modeler.db.Tdb;
+import api.ttt.db.modeler.modeler.TModeler;
+import api.ttt.db.modeler.modeler.TModelerCallback;
+import api.ttt.db.modeler.synchronizer.TSyncMaster;
+import api.ttt.db.modeler.synchronizer.interfaces.TSyncCallback;
 
 public class App extends Application {
 
@@ -35,9 +36,9 @@ public class App extends Application {
                 bases.add(Tdb.connect("FirstTdb"));
                 return bases;
             }
+            // ici on peut ajouter des paramettres specific de synchronisation
             @Override
-            public String onLoadServerHost() {/// - Notify network security config
-                //return "http://spoozy.app/tgps";
+            public String onLoadServerHost() {
                 return "http://192.168.236.174:8000";
             }
             @Override
@@ -56,18 +57,23 @@ public class App extends Application {
 
             @Override
             public void onServerAccessChange(boolean connected) {
-                /*
-                if(!MainActivity.log("Server Connected "+connected))
-                    TModeler.serverLink.offline();
-                if(connected)
-                    TSyncMaster.listener(MainActivity.syncListener()).sync(1000);*/
+                if(connected){
+                    TSyncMaster.listener(new TSyncCallback(){
+                        // pluysieur =s fenetre disponible pour suivre l'auto synchronisation des models autorisé
+
+                        @Override
+                        public void syncDone() {
+                            // quand tous les model sont sync
+                        }
+                    }).sync(1000); // période de synchronisation
+                }
             }
             @Override
             public void onPrepareSync() {
+                /// tres important ici, il sagit d'une fonction du TM (TModeler) dont le role est de communiquer au TSM des changement survenu dans les models de données
                 Chanel.tms.commit();
                 ChanelContext.tms.commit();
                 ChanelEditor.tms.commit();
-                ChanelType.tms.commit();
                 //
                 Messager.tms.commit();
                 MessagerRole.tms.commit();

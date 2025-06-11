@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ttt.api</groupId>
+  <artifactId>TModeler</artifactId>
+  <version>T1.0.24</version>
+  <packaging>aar</packaging>
+  <name>TModeler</name>
+  <description>A library for Model system control
+Visit the project on GitHub to learn more.</description>
+  <url>https://github.com/PoT-datas/TModeler</url>
+  <inceptionYear>2023</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache-2.0 License</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>TTT</id>
+      <name>Olivier TAMBO</name>
+      <email>olivierdhon@gmail.com</email>
+      <url>https://github.com/TTT-GH</url>
+      <roles>
+        <role>Lead Developer</role>
+      </roles>
+      <timezone>GMT+2:00</timezone>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:github.com/PoT-datasTModeler.git</connection>
+    <developerConnection>scm:git:ssh://github.com/TTT-GH/TModeler.git</developerConnection>
+    <url>https://github.com/TTT-GH/TModeler</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/TTT-GH/TModeler/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/TTT-GH/TModeler/actions</url>
+  </ciManagement>
+</project>

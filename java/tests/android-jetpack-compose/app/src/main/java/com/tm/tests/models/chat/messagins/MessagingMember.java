@@ -1,12 +1,13 @@
 package com.tm.tests.models.chat.messagins;
 
-import api.ttt.db.modeler.model.base.TModel;
-import api.ttt.db.modeler.model.fields.MField;
-import api.ttt.db.modeler.model.serializers.TMSerial;
-import api.ttt.db.modeler.ms.TMS;
-import api.ttt.db.modeler.synchronizer.utils.TServerInfos;
 import com.tm.tests.models.chat.massagers.Messager;
 import com.tm.tests.models.chat.massagers.MessagerRole;
+
+import api.ttt.db.modeler.field.ModelField;
+import api.ttt.db.modeler.model.base.TModel;
+import api.ttt.db.modeler.model.serializers.TMSerial;
+import api.ttt.db.modeler.ms.Tms;
+import api.ttt.db.modeler.synchronizer.utils.TServerInfos;
 
 /**
  * LE chiffrement des conversations se fait ici:
@@ -14,11 +15,25 @@ import com.tm.tests.models.chat.massagers.MessagerRole;
  * Liste ceux qui ont le droit d'echanger dans une conversation
  * */
 public class MessagingMember extends TModel<MessagingMember> {
-    public MField<Messaging> messaging = new MField<Messaging>(Messaging.class);
-    public MField<Messager> messager = new MField<Messager>(Messager.class);
-    public MField<MessagerRole> role = new MField<MessagerRole>(MessagerRole.class);
+    public ModelField<Messaging> messaging = new ModelField<Messaging>(Messaging.class);
+    public ModelField<Messager> messager = new ModelField<Messager>(Messager.class);
+    public ModelField<MessagerRole> role = new ModelField<MessagerRole>(MessagerRole.class);
 
 
     public static final TMSerial<MessagingMember> serial = new TMSerial<MessagingMember>(MessagingMember.class);
-    public static final TMS<MessagingMember> tms = initialize(MessagingMember.class, serial);
+    public static final Tms<MessagingMember> tms = initialize(MessagingMember.class, serial);
+
+
+    ///----------------------------------------------------------------------------------
+
+    @Override
+    public TServerInfos onSync() {
+        return super.onSync().with(
+                "im/messagings/members/",
+                null,
+                ()->{}
+        );
+    }
+
+    ///----------------------------------------------------------------------------------
 }

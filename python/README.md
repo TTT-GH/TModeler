@@ -4,13 +4,52 @@
 
 TModeler est une bibliothèque ORM (Object-Relational Mapping) pour Java qui permet de gérer les modèles de données de manière simple et efficace. Elle offre des fonctionnalités telles que la gestion des données, les observateurs, les filtres complexes, les jointures, les agrégations, et l'héritage des modèles de données.
 
-## Installation
+
+## 🐍 Installation - Version Python
+
+Ce guide explique comment installer localement une version spécifique de la librairie TModeler pour un projet Python ou Django, à l’aide du script install_tmodeler.py.
+
+---
 
 ### Prérequis
 
-### Dépendances
+- Python 3.6+ installé
+- pip accessible depuis la ligne de commande
+- Clonage du dépôt contenant :
 
-### Compilation
+```pgsql
+TModeler/
+└── python/
+    ├── dist/
+    │   └── ...
+    └── install_tmodeler.py
+```
+
+---
+
+### 🚀 Commande d'installation
+
+---
+
+Dans le dossier python/, exécutez la commande suivante dans votre terminal :
+
+```bash
+python install_tmodeler.py 1.0.5
+```
+⚠️ Remplacez 1.0.5 par la version que vous souhaitez installer.
+
+---
+
+### 📦 Utilisation dans votre projet Python ou Django
+
+Après installation, vous pouvez simplement importer la bibliothèque dans votre code Python :
+
+```python
+# ajouter l'app TModeler en amont
+from tmodeler import TModeler  # ou selon le contenu du module
+```
+
+---
 
 ## 📦 Tms<T> - TTT Model System
 
