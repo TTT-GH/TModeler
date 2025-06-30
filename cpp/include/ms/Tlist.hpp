@@ -62,6 +62,14 @@ void Tlist<Ts...>::set(size_t index, const ValueType& value) {
 }
 
 template <typename... Ts>
+void Tlist<Ts...>::add(size_t index, const ValueType& value) {
+    if (index > this->size())
+        throw std::out_of_range("Index out of range");
+
+    this->insert(this->begin() + index, value);
+}
+
+template <typename... Ts>
 void Tlist<Ts...>::remove(size_t index) {
     if (index >= this->size())
         throw std::out_of_range("Index out of range");

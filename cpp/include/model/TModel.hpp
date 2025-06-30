@@ -25,6 +25,18 @@ int TModel<T>::del()
 }
 
 template <typename T>
+void TModel<T>::clone()
+{
+    key().setValue(BaseField::NULL_INT);
+    // must return
+}
+template <typename T>
+void TModel<T>::reset()
+{
+    key().setValue(BaseField::NULL_INT);
+}
+
+template <typename T>
 bool TModel<T>::isCreated()
 {
     return !key().empty();
@@ -33,7 +45,7 @@ bool TModel<T>::isCreated()
 template <typename T>
 bool TModel<T>::saveOnLinking()
 {
-    return true;
+    return false;
 }
 
 template <typename T>

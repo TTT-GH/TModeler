@@ -14,3 +14,4 @@
 #include "field/TJsonField.hpp"
 #include "field/TModelField.hpp"
 #include "field/TListField.hpp"
+#include "field/GeoField.hpp"

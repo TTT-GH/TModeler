@@ -71,7 +71,7 @@ public:
     }
 
     // ✅ Accès index (array)
-    Json at(size_t index) const {
+    Json get(size_t index) const {
         Json j = json();
         if (j.is_array() && index < j.size()) return j.at(index);
         return Json{};

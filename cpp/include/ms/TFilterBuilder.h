@@ -59,6 +59,8 @@ public:
     TFilterBuilder& distinct();
 
     TFilterBuilder& select(const SelectClause& clause);
+    TFilterBuilder& addSelect(const std::string& column);
+    TFilterBuilder& addSelect(const SelectClause& clause);
     TFilterBuilder& from(const std::string& table);
     TFilterBuilder& where(const std::vector<WhereCondition>& conditions);
     TFilterBuilder& joins(const std::vector<JoinClause>& joinList);
@@ -72,7 +74,7 @@ public:
     std::string buildSQL() const;
 
     std::vector<std::vector<std::string>> fieldsKeys;
-
+    
 private:
     std::unique_ptr<Json> _query;
 
@@ -84,6 +86,9 @@ private:
     std::string parseHaving() const;
     std::string parseOrderBy() const;
     std::string parseLimit() const;
+
+public:
+    bool lazyBuild = false;
 };
 
 #endif // TFILTERBUILDER_H

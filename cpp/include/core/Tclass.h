@@ -8,6 +8,7 @@
 #include <iostream>
 #include <variant>
 #include <any>
+#include <map>
 
 using AnyList = std::vector<std::pair<std::string, std::any>>;
 
@@ -19,6 +20,7 @@ protected:
     std::string _package = "";
     std::string _db = "";
 
+    std::map<std::string, std::any> _fieldsMap;
 
     std::type_index _type;
     /* for another time
@@ -46,11 +48,16 @@ public:
 
     Tclass& db(std::string v);
 
-    
+
+    void prepare();
+
     template <typename... Args>
     Tclass& fields(Args&&... args) {
         _fields.clear();
         (_fields.emplace_back(args.first, args.second), ...);
+
+        prepare();
+
         return *this;
     }
 
@@ -60,6 +67,12 @@ public:
 
     // Compare types between this and another Tclass
     bool equals(const Tclass& other) const;
+
+    std::vector<std::string> geoFieldsKeys();
+    bool isFunctField(std::string v);
+
+    bool hasFunction(std::string fkey);
+    std::string applyFunction(std::string fkey, std::string value);
 
     // Check if this class descends from another class and return generation distance
     int descendsFrom(const Tclass& parent) const;
@@ -73,6 +86,9 @@ public:
     std::string getModelName() const;
 
     bool equals(Tclass* cls) const;
+
+
+    std::map<std::string, std::any> toMap(AnyList vec);
 
 
     bool operator==(Tclass& cls) const;

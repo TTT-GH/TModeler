@@ -22,6 +22,8 @@ public:
     virtual bool createTable(const std::string& tableScript) = 0;
     virtual bool dropTable(const std::string& tableName) = 0;
     virtual bool tableExists(const std::string& tableName) = 0;
+
+    virtual std::string tableSchema(const std::string& tableName) = 0;
 };
 
 // Classe Tdb de base
@@ -59,7 +61,7 @@ public:
     void notifyChange(std::string modelName, KeysType keys, bool onCreate = false, bool onUpdate = false, bool onDelete = false);
 
 
-    enum class Type { SQLITE, MYSQL, POSTGRESQL };
+    enum class Type { SQLITE, SPATIALITE, MYSQL, POSTGRESQL };
 
     class Builder {
     public:

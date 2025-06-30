@@ -25,7 +25,7 @@ Tlist<Ts...> Tms<Ts...>::filter()
         _builder->from(name());
     }
 
-    return build();
+    return ibuild();
 }
 
 
@@ -71,7 +71,7 @@ Tlist<Ts...> Tms<Ts...>::group(Args&... args)
         }()
             ), ...);
 
-    return build();
+    return ibuild();
 }
 
 template <typename... Ts>

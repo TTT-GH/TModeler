@@ -31,6 +31,7 @@ public:
     std::string name();
     std::vector<std::string> fieldsKeys();
     std::vector<std::vector<std::string>> allFieldsKeys();
+    std::vector<std::string> geoFieldsKeys();
     std::string dbId();
     bool clear();
     bool migrate();
@@ -62,6 +63,9 @@ public:
     void groupByItem(T& item, Tx& x);
     void groupByTuple(std::shared_ptr<TupleType> tuplet, Tx& tx);
 
+
+    Tms<Ts...> lazy(bool v=true);
+    Tlist<Ts...> ibuild();
     Tlist<Ts...> build();
 
 
@@ -71,6 +75,8 @@ public:
 
     template <typename... Ts2>
     int save(T& first, Ts2&... rest);
+    template <typename... Ts2>
+    int simulate(T* first, Ts2*... rest);
     template <typename... Ts2>
     int create(T* first, Ts2*... rest);
     template <typename... Ts2>
@@ -115,9 +121,13 @@ private:
 
     void setup(Tclass* modelClass);
 
+    void base_prepare();
     void prepare();
 
     void initCallbacks();
+
+public: //
+    void select();
 
 private:
     void fillTx(Tx& x, std::string modelName, AnyList modelFields);

@@ -15,6 +15,7 @@ enum class TFtype {
     VARCHAR,
     TEXT,
     REAL,
+    GEO,
     BLOB
 };
 
@@ -86,7 +87,8 @@ public:
     BaseField() : aggr(this, Operator::NONE){}
 
     virtual std::any& refValue();
-    virtual std::any getValue() const;
+    virtual std::any getValue() const; 
+    virtual bool exists() const;
     virtual bool empty() const;
     virtual void setValue(const std::any& v);
     virtual TFtype getType() const;
@@ -107,6 +109,27 @@ public:
     void initTmpAggr();
     bool hasAggr();
 
+    bool isGeo = false;
+
     Tx isNull();
     std::string targetField();
+
+public:
+    // integreted function
+    std::function<std::string(const std::string&, const std::string&)> _function;
+
+public:
+    using FuncType = std::function<std::string(const std::string&, const std::string&)>;
+
+private:
+    std::vector<FuncType> _functions;
+    size_t _currentIndex = 0;
+
+public:
+    void clearFunc();
+    void addFunc(const FuncType& func);
+    std::string applyFunc(const std::string& fieldKey, const std::string& wkt);
+    bool hasFunction();
+    void resetFuncIndex(int v = 0);
+
 };

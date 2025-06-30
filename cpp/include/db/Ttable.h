@@ -26,7 +26,13 @@ public:
 
     std::string toScript() const;
 
+    std::string toGeoScript(std::string tname) const;
+    std::string toGeoSpatialIndexScript(std::string tname) const;
+
     std::string toForeignScript() const;
+
+    bool isGeo() const;
+    bool isSpatialIndex() const;
 
     TtableField& name(const std::string& v);
 
@@ -44,6 +50,16 @@ public:
 
     TtableField& onDelete(const std::string& v);
 
+    TtableField& geoType(const std::string& v);
+
+    TtableField& geoSrid(int v);
+
+    TtableField& geoDim(int v);
+
+    TtableField& geoMeasure(bool v);
+
+    TtableField& geoSpatialIndex(bool v);
+
 private:
     std::string _name;
     std::string _type;
@@ -53,6 +69,12 @@ private:
     std::string _targetTable;
     std::string _targetField;
     std::string _onDelete;
+
+    std::string _geoType;
+    int _geoSrid;
+    int _geoDim;
+    bool _geoMeasure = false;
+    bool _geoSpatialIndex = false;
 
     std::string formatDefaultValue(const std::any& value) const;
 };

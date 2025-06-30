@@ -13,6 +13,8 @@ template <typename T>
 class ModelField : public IntFieldBase<ModelField<T>> {
 protected:
     std::shared_ptr<Tms<T>> _tms = nullptr;
+    T* _instance = nullptr;
+    bool _cache = false;
 public:
     ModelField() : IntFieldBase<ModelField<T>>()
     {
@@ -40,6 +42,25 @@ public:
         return _tms;
     }
 
+    int ref() {
+        return IntFieldBase<ModelField<T>>::get();
+    }
+
+    void setCache(T* instance) {
+        _instance = instance;
+    }
+
+    T* getCache() {
+        return _instance;
+    }
+
+    T get() {
+        if (_cache && _instance) {
+            return *_instance;
+        }
+        return tms()->get(IntFieldBase<ModelField<T>>::get());
+    }
+
     T model() {
         return tms()->get(IntFieldBase<ModelField<T>>::get());
     }
@@ -53,11 +74,21 @@ public:
         {
             IntFieldBase<ModelField<T>>::set(v.key().get());
         }
+        if (_cache) _instance = &v;
     }
 
     virtual ModelField& defaults(T v) {
         set(v);
         return *this;
+    }
+
+    virtual ModelField& cache(bool v=true) {
+        _cache = v;
+        return *this;
+    }
+
+    virtual bool useCache() {
+        return _cache;
     }
 
     virtual ModelField& onDelete(TF v) {

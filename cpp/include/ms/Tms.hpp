@@ -25,6 +25,9 @@ Tms<Ts..., NewTypes...> Tms<Ts...>::with(Ts&... ts, NewTypes&... args) {
         _builder.reset();
     }
     newTms._builder = std::make_shared<TFilterBuilder>();
+
+    newTms.select();
+
     newTms._builder->from(name());
 
     newTms._tuplet = std::make_shared<std::tuple<std::reference_wrapper<Ts>..., std::reference_wrapper<NewTypes>...>>(
@@ -39,18 +42,74 @@ Tms<Ts...> Tms<Ts...>::with(T& t)
         _builder.reset();
     }
     _builder = std::make_shared<TFilterBuilder>();
+
+    select();
+
     _builder->from(name());
     _instance = &t;
     return *this;
 }
 
+template <typename T>
+constexpr bool hasGeo() {
+    Tms<T> tms;
+    std::vector<std::string> geo = tms.geoFieldsKeys();
+    return !geo.empty();
+}
+
+template <typename T>
+void selectUnique(std::shared_ptr<TFilterBuilder> builder) {
+    Tms<T> tms;
+    std::string modelName = tms.name(); // Ex: "models_geo_Road"
+
+    std::vector<std::string> fields = tms.fieldsKeys();
+    std::vector<std::string> geoFields = tms.geoFieldsKeys();
+    std::vector<std::string> normalizeFields;
+
+    for (const std::string& field : fields) {
+        std::string fullName = modelName + "." + field;
+        if (std::find(geoFields.begin(), geoFields.end(), field) != geoFields.end()) {
+            normalizeFields.push_back("AsText(" + fullName + ") AS " + field);
+        }
+        else {
+            normalizeFields.push_back(fullName);
+        }
+    }
+
+    SelectClause clause;
+    clause.columns = normalizeFields;
+    clause.distinct = false;
+
+    builder->addSelect(clause); // on ajoute les colonnes au SELECT global
+}
+
 
 template <typename... Ts>
-void Tms<Ts...>::prepare()
-{
-    if (_isReady){ return;}
+void Tms<Ts...>::select() {
+    if constexpr (sizeof...(Ts) == 1) {
+        // Cas simple : un seul type
+        using T = typename std::tuple_element<0, std::tuple<Ts...>>::type;
+        selectUnique<T>(_builder);
+    }
+    else {
+        // Détecter si au moins un type a une géométrie
+        bool anyGeo = (hasGeo<Ts>() || ...);
 
-    if (_instance==nullptr)
+        if (anyGeo) {
+            std::apply([&](auto... args) {
+                (..., selectUnique<decltype(args)>(_builder));
+                }, std::tuple<Ts...>{});
+        }
+    }
+}
+
+
+template <typename... Ts>
+void Tms<Ts...>::base_prepare()
+{
+    if (_isReady) { return; }
+
+    if (_instance == nullptr)
     {
         _instance = new T();
     }
@@ -58,6 +117,14 @@ void Tms<Ts...>::prepare()
     {
         _modelClass = &_instance->clazz();
     }
+}
+
+template <typename... Ts>
+void Tms<Ts...>::prepare()
+{
+    if (_isReady) { return; }
+
+    base_prepare();
 
     setup(_modelClass);
 
@@ -66,7 +133,7 @@ void Tms<Ts...>::prepare()
 
 template <typename... Ts>
 bool Tms<Ts...>::exists() {
-    prepare();
+    base_prepare();
     return TmsDeep::exists(_modelClass);
 }
 
@@ -90,6 +157,14 @@ std::vector<std::string> Tms<Ts...>::fieldsKeys() {
     prepare();
 
     return TmsDeep::fieldsKeys(_modelClass);
+}
+
+// Get the model's fields
+template <typename... Ts>
+std::vector<std::string> Tms<Ts...>::geoFieldsKeys() {
+    prepare();
+
+    return TmsDeep::geoFieldsKeys(_modelClass);
 }
 
 // Get the models fields keys
@@ -119,7 +194,7 @@ bool Tms<Ts...>::clear()
 {
     if (exists())
     {
-        bool result = TmsDeep::clear(_modelClass, all().keys());
+        bool result = TmsDeep::clear(_modelClass, {});
         if (result)
         {
             _isReady = false;
@@ -129,19 +204,28 @@ bool Tms<Ts...>::clear()
     return false;
 }
 
+
+template <typename... Ts>
+Tms<Ts...> Tms<Ts...>::lazy(bool v)
+{
+    _builder->lazyBuild = v;
+    return *this;
+}
+template <typename... Ts>
+Tlist<Ts...> Tms<Ts...>::ibuild()
+{
+    if (!_builder->lazyBuild) {
+        return build();
+    }
+    return Tlist<Ts...>(std::make_shared<Tms<Ts...>>(*this));
+}
+
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::build()
 {
-    /*
-     * consequence des build intermedière :
-     * Il y a des build redondant tout le temps
-     * Donner un possibiliter de s'en passer et de build qu'à la fin
-     *
-     * Une sorte de build à postériori
-     *
-     */
-
     prepare();
+
+    Log::d(_builder->buildSQL());
 
     return TitemLoad<Ts...>::get(std::make_shared<Tms<Ts...>>(*this), _builder);
 }

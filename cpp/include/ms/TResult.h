@@ -5,14 +5,19 @@
 #include <optional>
 #include "core/Tob.hpp"
 
+
 /*
  * T query Result
  *
  */
 class TqResult {
 public:
-    enum class Status { DONE, ERROR, NOT_FOUND };
+    enum class TStatus {
+        DONE,
+        NOT_FOUND
+    };
+
 public:
-    Status status = Status::DONE;
+    TqResult::TStatus status = TqResult::TStatus::DONE;
     std::string data = "";
 };

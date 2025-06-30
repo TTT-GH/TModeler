@@ -72,19 +72,14 @@ public:
         std::vector<int> keys;
         for (int i = 0; i < JsonFieldBase<ListField<T>>::size(); i++)
         {
-            keys.push_back(JsonFieldBase<ListField<T>>::at(i));
+            keys.push_back(JsonFieldBase<ListField<T>>::get(i));
         }
         T i;
         return tms()->with(i).filter(i.key() >>= keys);
     }
 
-    T* get(int i) const {
-        auto all = list();
-        if (all.size()<=i)
-        {
-            return nullptr;
-        }
-        return all.at(i);
+    T get(int i) {
+        return tms()->get(JsonFieldBase<ListField<T>>::get(i));
     }
 
     virtual ListField& defaults(std::vector<T> v) {
@@ -99,6 +94,12 @@ public:
     }
 
     void add(int i, T& v) {
+        auto all = list();
+        all.add(i, v);
+        set(all);
+    }
+
+    void set(int i, T& v) {
         auto all = list();
         all.set(i, v);
         set(all);

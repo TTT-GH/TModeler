@@ -15,7 +15,7 @@ int TitemUpdate<Ts...>::put(std::shared_ptr<Tms<Ts...>> tms, std::shared_ptr<TFi
         return 0;
     }
 
-    std::string jsonData = T::data(instances);
+    std::string jsonData = Tob::data(instances);
 
     bool result = TmsDeep::updateData(tms->modelClass(), jsonData, instances.get(0).keyName());
 

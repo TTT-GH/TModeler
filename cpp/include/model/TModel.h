@@ -10,6 +10,7 @@
 #define TMClass Tclass::with(*this)
 #define TModelSuper &(TModel::clazz())
 #define TMSuper(T) &(T::clazz())
+#define TM_super(T) &(T::clazz())
 
 #define TM_SCHEMA(CLASSNAME, PACKAGE, ...) \
 private: \
@@ -47,7 +48,7 @@ public: \
 
 template <typename T>
 class TModel : public Tob{
-    TM_SCHEMA_EXPLICIT(TMSuper(Tob), T, "models.group", TF(id), TF(_id), TF(meta))
+    TM_SCHEMA_EXPLICIT(TMSuper(Tob), T, "", TF(id), TF(_id), TF(meta))
     TM_SERIAL(TMserial())
 
     Tms<T> _tms;
@@ -64,6 +65,9 @@ class TModel : public Tob{
     int create();
     int update();
     int del();
+
+    void clone();
+    void reset();
 
     virtual bool isCreated();
     virtual bool saveOnLinking();

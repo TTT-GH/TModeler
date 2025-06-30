@@ -1,5 +1,4 @@
-#ifndef TSQLITE_H
-#define TSQLITE_H
+#pragma once
 
 #include <string>
 #include "Tdb.h"
@@ -7,7 +6,7 @@
 struct sqlite3;
 
 class TsqliteDriver : public TdbDriver {
-private:
+protected:
     sqlite3* db;
     int lastId;
 
@@ -25,6 +24,5 @@ public:
     std::string executeQuery(const std::string& query) override;
     std::string executeQuery(const std::string& query, std::vector<std::vector<std::string>> fieldsKeys) override;
     bool deleteDatabase(const std::string& dbName) override;
+    std::string tableSchema(const std::string& tableName) override;
 };
-
-#endif // TSQLITE_H

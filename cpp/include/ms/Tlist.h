@@ -58,6 +58,7 @@ public:
 
     ValueType& get(size_t index);
     void set(size_t index, const ValueType& value);
+    void add(size_t index, const ValueType& value);
 
     template <typename Sp>
     const Sp& get(size_t i) const;

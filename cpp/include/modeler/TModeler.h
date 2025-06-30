@@ -9,8 +9,13 @@
 #include "TM.h"
 #include "TMProvider.h"
 #include "db/Tdb.h"
+#include <functional>
 
 class TModeler {
+private:
+    using Callback = std::function<void(void)>;
+    Callback _callback = nullptr;
+
 public:
 
     TM::DbType _dbType;
@@ -22,6 +27,12 @@ public:
 
     TModeler& init(std::unique_ptr<Tdb> db);
     Tdb& geTdb(const std::string& id, bool rw = false);
+
+public:
+    TModeler& dbReady(Callback cb);
+
+private:
+    TModeler& start(std::unique_ptr<Tdb> db);
 
 private:
     friend std::unique_ptr<TModeler> std::make_unique<TModeler>();

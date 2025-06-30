@@ -21,7 +21,10 @@ public:
     {
         return to<int>(TField<Derived, int>::getValue());
     }
-    void set(int v) override { TField<Derived, int>::setValue(v); }
+    void set(int v) override
+    {
+        TField<Derived, int>::setValue(v);
+    }
 };
 
 class IntField : public IntFieldBase<IntField>

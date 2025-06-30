@@ -10,7 +10,7 @@ template <typename... Ts>
 template <typename T>
 int TitemCreate<Ts...>::create(std::shared_ptr<Tms<Ts...>> tms, std::shared_ptr<TFilterBuilder> builder, Tlist<T*>& instances)
 {
-    std::string jsonData = T::data(instances.vector());
+    std::string jsonData = Tob::data(instances.vector());
 
     bool result = TmsDeep::insertData(tms->modelClass(), jsonData);
     int64_t lastid = TmsDeep::lastInsertRowId(tms->modelClass());

@@ -80,9 +80,22 @@ int Tms<Ts...>::save(T& first, Ts2&... rest) {
 }
 template <typename... Ts>
 template <typename... Ts2>
+int Tms<Ts...>::simulate(T* first, Ts2*... rest) {
+    int index = all().size()+1;
+    Tlist<T*> instances;
+    instances.push_back(first);
+    (instances.push_back(rest), ...);
+    int count = instances.size();
+    for (int i = 0; i < count; i++) {
+        instances.get(i)->key() = index;
+        index++;
+    }
+    return count;
+}
+template <typename... Ts>
+template <typename... Ts2>
 int Tms<Ts...>::create(T* first, Ts2*... rest) {
     Tlist<T*> instances;
-    //instances.tms(std::make_shared<Tms<T>>(*this));
     instances.push_back(first);
     (instances.push_back(rest), ...);
     return create(instances);

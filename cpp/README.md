@@ -18,6 +18,7 @@ TModeler dépend des bibliothèques suivantes, qui sont intégrées automatiquem
 
 - **TModelerLib** (dépôt GitHub)
 - **nlohmann_json** (JSON pour C++)
+- **Les bin près de votre executable** (Si vous utiliser des fonctionnalitées géo spatiales : Copier tous TModeler/bin/ selon votre compilateur, près de votre executable)
 
 ### Compilation
 

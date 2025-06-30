@@ -5,6 +5,7 @@
 
 #include "core/Tob.hpp"
 
+class TGeo;
 using ValueVariant = std::variant<int, double, std::string>;
 
 enum class Operator {
@@ -37,6 +38,34 @@ enum class Operator {
     Sum,
     Count,
     CountDistinct,
+
+    // Geo
+    ST_Equals,
+    ST_Intersects,
+    ST_Contains,
+    ST_Within,
+    ST_Touches,
+    ST_Crosses,
+    ST_Overlaps,
+    ST_Disjoint,
+    MbrIntersects,
+    ST_Buffer,
+    ST_Intersection,
+    //
+    ST_DWithin,
+    //
+    ST_Distance,
+    ST_Area,
+    ST_Length,
+    //+
+    ST_Perimeter,
+    ST_Azimuth,
+    ST_X,
+    ST_Y,
+    ST_NumPoints,
+    ST_Dimension,
+    ST_GeometryType,
+    ST_IsClosed,
 };
 
 class Tx
@@ -47,6 +76,7 @@ public:
     BaseField* field = nullptr;
     Operator op = Operator::NONE;
     ValueVariant value;
+    const TGeo* geoValue = nullptr;
     std::vector<ValueVariant> values;
     std::string fieldKey = "";
     Tx* v1 = nullptr;
@@ -66,9 +96,15 @@ public:
 
     std::string toString() const;
 
+    std::pair<std::string, std::string> splitOrderExpr() const;
+
     bool isJoining() const;
 
     bool isAggr() const;
+
+    bool hasIntegratedFunc() const;
+
+    bool isGeoOp() const;
 
     bool empty() const;
 
@@ -76,7 +112,17 @@ public:
 
     Tx operator||(Tx&& other);
 
+    Tx operator&&(Tx& other);
+
+    Tx operator||(Tx& other);
+
     Tx operator!();
+
+    Tx operator<(int i) const;
+
+    void prepare(const TGeo* val=nullptr);
+
+    static void prepare(BaseField* f, const std::string baseFunc, const int srid);
 };
 
 std::string vectorToString(const std::vector<std::string>& vec);

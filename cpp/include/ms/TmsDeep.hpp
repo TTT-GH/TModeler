@@ -23,9 +23,8 @@ public:
     static void addObserver(Tclass* _modelClass, const std::shared_ptr<TModelObserver>& observer);
     static void removeObserver(Tclass* _modelClass, const std::shared_ptr<TModelObserver>& observer);
     static std::vector<std::string> fieldsKeys(Tclass* _modelClass);
+    static std::vector<std::string> geoFieldsKeys(Tclass* _modelClass);
 };
-
-
 
 
 template <typename... Ts>
@@ -37,17 +36,28 @@ Tlist<Ts...> Tms<Ts...>::order(T& item, Tx& tx)
         { tx.toString() }
         });
 
-    return build();
+    return ibuild();
 }
 template <typename... Ts>
 Tlist<Ts...> Tms<Ts...>::order(std::shared_ptr<TupleType> tuplet, Tx& tx) {
     apply(*tuplet, tx);
 
-    _builder->orderBy({
-        { tx.toString() }
-        });
+    if (tx.hasIntegratedFunc()) {
+        auto [orderExpr, direction] = tx.splitOrderExpr();
 
-    return build();
+        std::string alias = "__distance";
+
+        _builder->addSelect(orderExpr + " AS " + alias);
+        _builder->orderBy({ {alias + " " + direction} });
+    }
+    else
+    {
+        _builder->orderBy({
+            { tx.toString() }
+        });
+    }
+
+    return ibuild();
 }
 
 template <typename... Ts>
