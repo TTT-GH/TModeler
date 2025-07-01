@@ -18,7 +18,14 @@ TModeler depends on the following libraries, which are automatically integrated 
 
 - **TModelerLib** (GitHub repository)
 - **nlohmann_json** (JSON for C++)
-- **Bins near your executable** (If you use geo-spatial features: Copy all TModeler/bin/ files according to your compiler, near your executable)
+
+### Dependencies bin for geo-spatial features
+- **Windows : Bins near your executable** (Copy all TModeler/bin/ files according to your compiler, near your executable)
+- **Linux : run cmd**
+```bash
+sudo apt update
+sudo apt install spatialite-bin libsqlite3-mod-spatialite
+```
 
 ### Compilation
 
