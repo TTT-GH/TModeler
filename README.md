@@ -23,7 +23,7 @@ The project is currently available in C++, Java and Python.
 The following demo shows the capabilities of TModeler in managing complex road networks with one-way constraints, multiple intersections, and dense routing data.
 
 <video controls autoplay muted loop width="100%">
-  <source src="https://github.com/TTT-GH/TModeler/blob/main/geo_spatial.mp4" type="video/mp4">
+  <source src="https://github.com/TTT-GH/TModeler/raw/main/geo_spatial.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
