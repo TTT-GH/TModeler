@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <cmath>
 #include <algorithm>
-#include <sqlite3.h>
 
 class Spot;
 class Rect;

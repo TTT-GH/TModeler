@@ -225,8 +225,6 @@ Tlist<Ts...> Tms<Ts...>::build()
 {
     prepare();
 
-    Log::d(_builder->buildSQL());
-
     return TitemLoad<Ts...>::get(std::make_shared<Tms<Ts...>>(*this), _builder);
 }
 
