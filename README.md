@@ -27,14 +27,11 @@ The following demo shows the capabilities of TModeler in managing complex road n
   Your browser does not support the video tag.
 </video>
 
-
 ### Demonstrated Features
 1. Nearest road search
 Given a random position p, the system retrieves the closest road geometry:
 
 ```cpp
-Copier
-Modifier
 auto result = Road::tms.with(r0, g0)
     .lazy()
     .filter(r0.geoobject == g0)
