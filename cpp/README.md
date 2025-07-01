@@ -2,27 +2,27 @@
 
 ## Description
 
-TModeler est une bibliothèque ORM (Object-Relational Mapping) pour C++ qui permet de gérer les modèles de données de manière simple et efficace. Elle offre des fonctionnalités telles que la gestion des données, les observateurs, les filtres complexes, les jointures, les agrégations, et l'héritage des modèles de données.
+TModeler is an ORM (Object-Relational Mapping) library for C++ that allows managing data models simply and efficiently. It offers features such as data management, observers, complex filters, joins, aggregations, and data model inheritance.
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 
-- CMake 3.24 ou supérieur
-- C++17 ou supérieur
+- CMake 3.24 or higher
+- C++17 or higher
 - Git
 
-### Dépendances
+### Dependencies
 
-TModeler dépend des bibliothèques suivantes, qui sont intégrées automatiquement via `FetchContent` :
+TModeler depends on the following libraries, which are automatically integrated via `FetchContent`:
 
-- **TModelerLib** (dépôt GitHub)
-- **nlohmann_json** (JSON pour C++)
-- **Les bin près de votre executable** (Si vous utiliser des fonctionnalitées géo spatiales : Copier tous TModeler/bin/ selon votre compilateur, près de votre executable)
+- **TModelerLib** (GitHub repository)
+- **nlohmann_json** (JSON for C++)
+- **Bins near your executable** (If you use geo-spatial features: Copy all TModeler/bin/ files according to your compiler, near your executable)
 
 ### Compilation
 
-Pour intégrer ces dépendances et compiler le projet, ajoutez le code suivant dans votre fichier `CMakeLists.txt` :
+To integrate these dependencies and compile the project, add the following code to your `CMakeLists.txt` file:
 
 ```cmake
 include(FetchContent)
@@ -44,7 +44,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(nlohmann_json)
 
-# Lier les bibliothèques au projet
+# Link the libraries to the project
 target_link_libraries(${PROJECT_NAME}
     # ...
     PRIVATE TModeler
@@ -55,14 +55,14 @@ target_link_libraries(${PROJECT_NAME}
 
 ## 📦 Tms<T> - TTT Model System
 
-Un système générique de gestion de modèles orienté données, permettant :
+A generic data-oriented model management system, enabling:
 
-- CRUD complet
-- Observations inter-thread et inter-modulaires
-- Filtres puissants
-- Jointures inter-modèles
-- Groupes et agrégations
-- Utilitaires de manipulation directe
+- Full CRUD
+- Inter-thread and inter-module observations
+- Powerful filters
+- Inter-model joins
+- Grouping and aggregations
+- Direct manipulation utilities
 
 ---
 
@@ -73,6 +73,10 @@ To run the unit tests for TModeler C++, make sure you initialize the ORM properl
 ```cpp
 // Initialize the TModeler ORM with one or more databases.
 TModeler::start()
+    .dbReady([]()
+    {
+        // Data management starts here
+    })
     .init(Tdb::Builder()
         .type(Tdb::Type::SQLITE)
         .dbDir("/tmp/sql")              // Path to SQLite database directory
@@ -136,7 +140,6 @@ class Familly : public TModel<Familly> {
 
     TextField name;
 };
-TM_MANAGER(Familly)
 
 class Person : public TModel<Person> {
     TM_SCHEMA(Person, "models.users",
@@ -153,8 +156,18 @@ class Person : public TModel<Person> {
     ModelField<Person> myFamilly = init<ModelField<Person>>().onDelete(TF::CASCADE);
     ModelField<Familly> bigFamilly = init<ModelField<Familly>>().onDelete(TF::CASCADE);
     ListField<Person> friends = init<ListField<Person>>();
+    GeoField location = GeoField().spatialIndex(true);
 };
-TM_MANAGER(Person)
+
+// Geo spatial object model
+class Geo : public TModel<Geo> {
+    TM_SCHEMA(Geo, "models.space", TF(title), TF(description), TF(loc), TF(geometry))
+
+    TextField title;
+    TextField description;
+    GeoField loc = GeoField().spatialIndex();
+    GeoField geometry = GeoField().spatialIndex();
+};
 ```
 
 💡 All object-oriented principles apply to models and their fields: encapsulation, inheritance, composition, etc.
@@ -449,6 +462,25 @@ Log::d("join Cmd + Client: \n" + joinCmdClient.data());
 - Filters and joins do not modify data, they work like std::views.
 - You can combine filter, order, group, and select() to build complex data queries.
 - Join supports INNER, LEFT, and possibly RIGHT/FULL depending on implementation.
+
+### Geo Spatial
+
+```cpp
+auto filter = Geo::tms.with(g0)
+        .lazy()
+        .filter(g0.loc.index(p1) && g0.loc.intersects(p1))
+        .group(g0.title)
+        .filter(g0._id.count() >= 2)
+        .build();
+    Log::d(filter.data());
+    filter = Geo::tms.with(g0)
+        .lazy()
+        .filter(g0.loc.index(s1) && (g0.loc.distance(s1) <= 10) && (g0.loc.azimuth(s1) < 30))
+        .group(g0.title)
+        .filter(g0._id.count() >= 2)
+        .build();
+    Log::d(filter.data());
+```
 
 ---
 

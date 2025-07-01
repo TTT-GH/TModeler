@@ -1,20 +1,20 @@
 # TModeler
 
-TModeler est une bibliothèque ORM (Object-Relational Mapping) multi-langages permettant de gérer des modèles de données de manière simple et efficace. 
-Le projet est actuellement disponible en C++, Java et Python.
+TModeler is a multi-language ORM (Object-Relational Mapping) library that allows managing data models in a simple and efficient way. 
+The project is currently available in C++, Java and Python.
 
-## Langages disponibles
+## Available Languages
 
-- **C++** : [Voir la documentation C++](cpp/README.md)
-- **Java** : [Voir la documentation Java](java/README.md)
-- **Python** : [Voir la documentation Python](python/README.md)
+- **C++** : [See C++ documentation](cpp/README.md)
+- **Java** : [See Java documentation](java/README.md)
+- **Python** : [See Python documentation](python/README.md)
 
-## Fonctionnalités
+## Features
 
-- **Gestion des modèles de données** : Création, mise à jour, suppression, et récupération des modèles.
-- **Observateurs multithread** : Permet de suivre les changements dans les données sur différents threads.
-- **Filtres, jointures et agrégations** : Applique des filtres complexes sur les données, joint des modèles et effectue des agrégations.
-- **Héritage de modèles et champs personnalisés** : Crée des modèles personnalisés avec des champs hérités ou nouveaux.
+- **Data model management** : Create, update, delete, and retrieve models.
+- **Multithreaded observers** : Allows tracking changes in data across different threads.
+- **Filters, joins and aggregations** : Apply complex filters on data, join models and perform aggregations.
+- **Model inheritance and custom fields** : Create custom models with inherited or new fields.
   
 ## Tests
 
@@ -42,19 +42,19 @@ person.dob = "2000-11-07";
 person.save();
 
 Tlist<Client, Cmd> join = Client::tms.with<Cmd>(cl, cm)
-    .join(JoinType::LEFT).filter(cm.client == cl._id)       // jointure à gauche : tous les clients même sans commande
-    .filter(cm.client == nullptr)                           // conserve uniquement les clients sans commande
-    .order(-cl.dob)                                         // trie par date de naissance décroissante (plus jeune en premier)
-    .group(cl.country)                                      // regroupe les clients par pays
-    .filter(cl._id.count() >= 5);                           // filtre les pays avec au moins 5 clients sans commande
+    .join(JoinType::LEFT).filter(cm.client == cl._id)       // left join: all clients even without orders
+    .filter(cm.client == nullptr)                           // keep only clients without orders
+    .order(-cl.dob)                                         // sort by date of birth descending (youngest first)
+    .group(cl.country)                                      // group clients by country
+    .filter(cl._id.count() >= 5);                           // filter countries with at least 5 clients without orders
 auto client = join.select<Client>().first();
 Log(client.data());
 ```
 
-Cette requête affiche donc :
-- Le plus jeune client (par pays),
-- parmi les pays ayant au moins 5 clients n’ayant jamais commandé.
+This query therefore displays:
+- The youngest client (per country),
+- among the countries with at least 5 clients who have never placed an order.
 
 
 
-# **TModeler** : [Voir la documentation](cpp/README.md)
+# **TModeler** : [See documentation](cpp/README.md)

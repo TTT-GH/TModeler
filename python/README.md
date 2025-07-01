@@ -2,20 +2,20 @@
 
 ## Description
 
-TModeler est une bibliothèque ORM (Object-Relational Mapping) pour Java qui permet de gérer les modèles de données de manière simple et efficace. Elle offre des fonctionnalités telles que la gestion des données, les observateurs, les filtres complexes, les jointures, les agrégations, et l'héritage des modèles de données.
+TModeler is an ORM (Object-Relational Mapping) library for Java that allows managing data models simply and efficiently. It offers features such as data management, observers, complex filters, joins, aggregations, and data model inheritance.
 
 
-## 🐍 Installation - Version Python
+## 🐍 Installation - Python Version
 
-Ce guide explique comment installer localement une version spécifique de la librairie TModeler pour un projet Python ou Django, à l’aide du script install_tmodeler.py.
+This guide explains how to locally install a specific version of the TModeler library for a Python or Django project, using the install_tmodeler.py script.
 
 ---
 
-### Prérequis
+### Prerequisites
 
-- Python 3.6+ installé
-- pip accessible depuis la ligne de commande
-- Clonage du dépôt contenant :
+- Python 3.6+ installed
+- pip accessible from the command line
+- Cloning the repository containing:
 
 ```pgsql
 TModeler/
@@ -27,40 +27,40 @@ TModeler/
 
 ---
 
-### 🚀 Commande d'installation
+### 🚀 Installation Command
 
 ---
 
-Dans le dossier python/, exécutez la commande suivante dans votre terminal :
+In the python/ directory, run the following command in your terminal:
 
 ```bash
 python install_tmodeler.py 1.0.5
 ```
-⚠️ Remplacez 1.0.5 par la version que vous souhaitez installer.
+⚠️ Replace 1.0.5 with the version you want to install.
 
 ---
 
-### 📦 Utilisation dans votre projet Python ou Django
+### 📦 Usage in Your Python or Django Project
 
-Après installation, vous pouvez simplement importer la bibliothèque dans votre code Python :
+After installation, you can simply import the library into your Python code:
 
 ```python
-# ajouter l'app TModeler en amont
-from tmodeler import TModeler  # ou selon le contenu du module
+# add the TModeler app beforehand
+from tmodeler import TModeler  # or depending on the module content
 ```
 
 ---
 
 ## 📦 Tms<T> - TTT Model System
 
-Un système générique de gestion de modèles orienté données, permettant :
+A generic data-oriented model management system, enabling:
 
-- CRUD complet
-- Observations inter-thread et inter-modulaires
-- Filtres puissants
-- Jointures inter-modèles
-- Groupes et agrégations
-- Utilitaires de manipulation directe
+- Full CRUD
+- Inter-thread and inter-module observations
+- Powerful filters
+- Inter-model joins
+- Grouping and aggregations
+- Direct manipulation utilities
 
 ---
 

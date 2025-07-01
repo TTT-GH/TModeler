@@ -2,20 +2,20 @@
 
 ## Description
 
-TModeler est une bibliothèque ORM (Object-Relational Mapping) pour Java qui permet de gérer les modèles de données de manière simple et efficace. Elle offre des fonctionnalités telles que la gestion des données, les observateurs, les filtres complexes, les jointures, les agrégations, et l'héritage des modèles de données.
+TModeler is an ORM (Object-Relational Mapping) library for Java that allows managing data models in a simple and efficient way. It offers features such as data management, observers, complex filters, joins, aggregations, and data model inheritance.
 
 ## Installation
 
-Ce guide explique comment installer localement une version spécifique de la librairie `TModeler` dans votre dépôt Maven, en utilisant le script `maven_install.bat`.
+This guide explains how to locally install a specific version of the `TModeler` library into your Maven repository using the `maven_install.bat` script.
 
 ---
 
-### Prérequis
+### Prerequisites
 
-- Java JDK installé
-- [Maven](https://maven.apache.org/) installé et accessible via la ligne de commande
-- Un terminal PowerShell ou CMD avec droits d’exécution
-- cloner le depot
+- Java JDK installed
+- [Maven](https://maven.apache.org/) installed and accessible via command line
+- A PowerShell or CMD terminal with execution rights
+- Clone the repository
 ```pgsql
 TModeler/
 ├── java/
@@ -26,14 +26,13 @@ TModeler/
 
 ---
 
-### 🚀 Commande d'installation
+### 🚀 Installation Command
 
-
-> ⚠️ Remplace `T1.0.24` par toute autre version si nécessaire, en conservant la même structure de dossiers.
+> ⚠️ Replace `T1.0.24` with any other version if needed, keeping the same folder structure.
 
 ---
 
-Dans le dossier `java/`, exécutez la commande suivante :
+In the `TModeler/java/` directory, run the following command:
 
 ```bash
 .\maven_install.bat T1.0.24
@@ -41,9 +40,9 @@ Dans le dossier `java/`, exécutez la commande suivante :
 
 ---
 
-### 📦 Intégration dans un projet Maven
+### 📦 Integration into a Maven Project
 
-Une fois installée, ajoutez la dépendance suivante dans votre pom.xml :
+Once installed, add the following dependency to your pom.xml:
 
 ```xml
 <dependency>
@@ -56,11 +55,11 @@ Une fois installée, ajoutez la dépendance suivante dans votre pom.xml :
 
 ---
 
-### 📦 Intégration dans un projet Android Studio
+### 📦 Integration into an Android Studio Project
 
-Une fois le .aar installé localement avec maven_install.bat, vous pouvez l'ajouter à votre projet Android Studio de la manière suivante :
+Once the .aar is locally installed with maven_install.bat, you can add it to your Android Studio project as follows:
 
-1. Ajoutez la dépendance dans build.gradle (Module: app) :
+1. Add the dependency in build.gradle (Module: app):
 
 ```groovy
 dependencies {
@@ -68,7 +67,7 @@ dependencies {
 }
 ```
 
-2. Assurez-vous que mavenLocal() est bien présent dans la section repositories de votre build.gradle :
+2. Make sure that mavenLocal() is present in the repositories section of your build.gradle:
 
 ```groovy
 repositories {
@@ -82,14 +81,14 @@ repositories {
 
 ## 📦 Tms<T> - TTT Model System
 
-Un système générique de gestion de modèles orienté données, permettant :
+A generic data-oriented model management system, allowing:
 
-- CRUD complet
-- Observations inter-thread et inter-modulaires
-- Filtres puissants
-- Jointures inter-modèles
-- Groupes et agrégations
-- Utilitaires de manipulation directe
+- Full CRUD
+- Inter-thread and inter-module observations
+- Powerful filters
+- Inter-model joins
+- Grouping and aggregations
+- Direct manipulation utilities
 
 ---
 
