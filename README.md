@@ -15,7 +15,42 @@ The project is currently available in C++, Java and Python.
 - **Multithreaded observers** : Allows tracking changes in data across different threads.
 - **Filters, joins and aggregations** : Apply complex filters on data, join models and perform aggregations.
 - **Model inheritance and custom fields** : Create custom models with inherited or new fields.
-  
+- **Geospatial indexing and queries** : Store and search spatial data efficiently (see demo below).
+ 
+---
+
+## Geospatial Demo
+The following demo shows the capabilities of TModeler in managing complex road networks with one-way constraints, multiple intersections, and dense routing data.
+
+https://github.com/TTT-GH/TModeler/geo_spatial.mp4
+
+### Demonstrated Features
+1. Nearest road search
+Given a random position p, the system retrieves the closest road geometry:
+
+```cpp
+Copier
+Modifier
+auto result = Road::tms.with(r0, g0)
+    .lazy()
+    .filter(r0.geoobject == g0)
+    .filter(g0.geometry.index(p.buffer(b)))
+    .order(+g0.geometry.distance(p))
+    .build()
+    .select<Road>();
+```
+
+This query:
+- Filters roads whose geometry intersects a buffer area around point p,
+- Orders them by ascending distance to p,
+- Selects the nearest Road.
+
+2. Route computation
+The system can also compute a complete route between two arbitrary positions.
+This highlights the routing engine's ability to navigate complex networks with traffic rules.
+
+---
+
 ## Tests
 
 ```cpp

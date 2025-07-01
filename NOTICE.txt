@@ -1,0 +1,9 @@
+## Licensing
+
+This project is primarily licensed under the **Apache License, Version 2.0**.
+
+However, to ensure compatibility with strong copyleft environments and to support the principles of software freedom, it is **also available under the GNU General Public License v3 (GPLv3)** as a secondary license.
+
+You may choose either license when using or distributing this software.
+
+See `LICENSE` for the Apache License 2.0 and `LICENSE-GPLv3` for the GPLv3.
