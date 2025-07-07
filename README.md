@@ -24,7 +24,7 @@ The following demo shows the capabilities of **TModeler** in managing complex ro
 
 [![Watch the Geospatial Demo](assets/geospatial-demo.png)](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_qt-qml-c-activity-7347604944583106560-0q3z)
 
-👉 [Watch on LinkedIn](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_qt-qml-c-activity-7347604944583106560-0q3z)
+👉 [Watch the Geospatial Demo](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_qt-qml-c-activity-7347604944583106560-0q3z)
 
 ### Demonstrated Features
 1. Nearest road search
@@ -54,7 +54,9 @@ This highlights the routing engine's ability to navigate complex networks with t
 ## UI MVVM Demo (Qt/QML)
 The following demo shows the capabilities of **TModeler** in building responsive UI with complex routing data using **MVVM** architecture in **Qt/QML**.
 
-👉 [![Watch on LinkedIn](assets/ui-qt-qml-demo.png)](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_cplusplus-java-kotlin-activity-7346872422601543680--utC)
+[![Watch the MVVM Qt/QML UI Demo](assets/ui-qt-qml-demo.png)](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_cplusplus-java-kotlin-activity-7346872422601543680--utC)
+
+👉 [Watch the MVVM Qt/QML UI Demo](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_cplusplus-java-kotlin-activity-7346872422601543680--utC)
 
 ---
 
