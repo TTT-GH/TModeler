@@ -20,12 +20,11 @@ The project is currently available in C++, Java and Python.
 ---
 
 ## Geospatial Demo
-The following demo shows the capabilities of TModeler in managing complex road networks with one-way constraints, multiple intersections, and dense routing data.
+The following demo shows the capabilities of **TModeler** in managing complex road networks with one-way constraints, multiple intersections, and dense routing data.
 
-<video controls autoplay muted loop width="100%">
-  <source src="https://github.com/TTT-GH/TModeler/raw/main/geo_spatial.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[![Watch the Geospatial Demo](assets/geospatial-demo.png)](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_qt-qml-c-activity-7347604944583106560-0q3z)
+
+👉 [Watch on LinkedIn](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_qt-qml-c-activity-7347604944583106560-0q3z)
 
 ### Demonstrated Features
 1. Nearest road search
@@ -49,6 +48,13 @@ This query:
 2. Route computation
 The system can also compute a complete route between two arbitrary positions.
 This highlights the routing engine's ability to navigate complex networks with traffic rules.
+
+---
+
+## UI MVVM Demo (Qt/QML)
+The following demo shows the capabilities of **TModeler** in building responsive UI with complex routing data using **MVVM** architecture in **Qt/QML**.
+
+👉 [![Watch on LinkedIn](assets/ui-qt-qml-demo.png)](https://www.linkedin.com/posts/luc-olivier-fotsing-tambo-a94b00372_cplusplus-java-kotlin-activity-7346872422601543680--utC)
 
 ---
 
